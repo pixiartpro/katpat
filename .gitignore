@@ -1,0 +1,5 @@
+# Ne JAMAIS publier : docs internes (stratégie, base cockpit, rollback, contacts)
+.DS_Store
+fiche.md
+garde-manger.md
+ROLLBACK.sql
