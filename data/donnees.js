@@ -186,7 +186,7 @@ window.KP = {
     { nom: "A'V Refuge", zone: "Réunion", type: "Refuge", fait: "Protège les animaux et mène des campagnes de stérilisation. Cherche des bénévoles.", lien: "https://www.jeveuxaider.gouv.fr/missions-benevolat/66312/benevolat-av-refuge" },
     { nom: "REVEZ", zone: "Réunion", type: "Sensibilisation", fait: "Sensibilise à la bientraitance animale et dialogue avec les élus.", lien: "https://www.helloasso.com/associations/revez" },
     { nom: "Les Coussinets du Cœur", zone: "Réunion, Guyane, métropole", type: "Sauvetage", fait: "Prend en charge des animaux à La Réunion et les accompagne vers l'adoption.", lien: "https://www.helloasso.com/associations/les-coussinets-du-c-ur" },
-    { nom: "Les Oubliés de la Run", zone: "Réunion", type: "Sauvetage", fait: "Association de protection des chiens de l'île.", lien: "" }
+    { nom: "Les Oubliés de la Run", zone: "Réunion et métropole", type: "Sauvetage", fait: "Soigne et fait vacciner des chiens errants ou abandonnés de l'île, puis les fait adopter à La Réunion, en métropole, en Suisse ou en Belgique.", lien: "https://www.helloasso.com/associations/les-oublies-de-la-run-association" }
   ],
 
   /* Refuges publics des intercommunalités (source : stoperrance.re) */
