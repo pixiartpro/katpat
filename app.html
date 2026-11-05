@@ -60,9 +60,10 @@
   body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);z-index:41;background:var(--bg)}
   .top{position:sticky;top:env(safe-area-inset-top,0px);z-index:40;background:rgba(19,17,15,.82);-webkit-backdrop-filter:blur(10px);backdrop-filter:blur(10px);border-bottom:1px solid var(--line)}
   .top-in{display:flex;align-items:center;justify-content:space-between;height:60px;gap:12px}
-  .logo{font-family:var(--f-display);font-weight:700;font-size:1.3rem;text-decoration:none;letter-spacing:-.01em}
+  .logo{display:block;text-decoration:none}
+  .logo img{display:block;height:30px;width:auto}
   .logo span{color:var(--amber)}
-  .logo small{display:block;font-family:var(--f-body);font-weight:500;font-size:.58rem;letter-spacing:.26em;text-transform:uppercase;color:var(--muted);margin-top:-3px}
+  .logo small{display:block;font-family:var(--f-body);font-weight:500;font-size:.58rem;letter-spacing:.26em;text-transform:uppercase;color:var(--muted);margin-top:2px}
   .tabs-top{display:flex;gap:6px}
   .tabs-top a{font-size:.9rem;color:var(--muted);text-decoration:none;padding:8px 14px;border-radius:999px;border:1px solid transparent;transition:color .2s var(--ease),border-color .2s var(--ease)}
   .tabs-top a[aria-current="page"]{color:var(--ink);border-color:rgba(232,161,58,.5)}
@@ -208,7 +209,7 @@
 
 <header class="top">
   <div class="wrap top-in">
-    <a class="logo" href="index.html">Kat'<span>Pat'</span><small>un Monde Pixie</small></a>
+    <a class="logo" href="index.html"><img src="assets/logo-katpat.svg" alt="Kat'Pat'" width="103" height="34" /><small>un Monde Pixie</small></a>
     <nav class="tabs-top" aria-label="Rubriques">
       <a href="#sante" data-v="sante">Santé péi</a>
       <a href="#perdu" data-v="perdu">Perdu · Trouvé</a>
