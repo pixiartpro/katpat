@@ -72,7 +72,7 @@
   .tabbar{position:fixed;left:0;right:0;bottom:0;z-index:40;background:rgba(28,24,21,.94);-webkit-backdrop-filter:blur(12px);backdrop-filter:blur(12px);border-top:1px solid var(--line);
     padding:6px max(8px,env(safe-area-inset-right,0px)) calc(6px + env(safe-area-inset-bottom,0px)) max(8px,env(safe-area-inset-left,0px));display:none}
   .tabbar nav{display:grid;grid-template-columns:repeat(4,1fr);max-width:520px;margin:0 auto}
-  .tabbar a{display:flex;flex-direction:column;align-items:center;gap:2px;padding:6px 2px;text-decoration:none;font-size:.72rem;color:var(--muted);border-radius:12px;transition:transform .15s var(--ease),color .15s var(--ease)}
+  .tabbar a{display:flex;flex-direction:column;align-items:center;gap:2px;padding:6px 2px;min-height:48px;text-decoration:none;font-size:.8rem;color:var(--muted);border-radius:12px;transition:transform .15s var(--ease),color .15s var(--ease)}
   .tabbar a .i{font-size:1.35rem;line-height:1.1}
   .tabbar a:active{transform:scale(.94)}
   .tabbar a[aria-current="page"]{color:var(--amber-soft)}
@@ -108,7 +108,7 @@
 
   /* Santé */
   .filters{display:flex;flex-wrap:wrap;gap:8px;margin-top:20px}
-  .chip{border:1px solid var(--line);background:var(--card);border-radius:999px;padding:8px 14px;font-size:.88rem;cursor:pointer;transition:border-color .2s var(--ease),transform .15s var(--ease)}
+  .chip{border:1px solid var(--line);background:var(--card);border-radius:999px;padding:8px 16px;min-height:44px;font-size:.88rem;cursor:pointer;transition:border-color .2s var(--ease),transform .15s var(--ease)}
   .chip:active{transform:scale(.96)}
   .chip[aria-pressed="true"]{border-color:var(--amber);color:var(--amber-soft)}
   .fiches{display:grid;gap:12px;margin-top:18px}
@@ -118,10 +118,10 @@
   details.fiche summary::-webkit-details-marker{display:none}
   .fiche .em{font-size:1.7rem;line-height:1}
   .fiche h3{font-size:1.15rem}
-  .fiche .pour{font-size:.8rem;color:var(--muted)}
+  .fiche .pour{font-size:.86rem;color:var(--muted)}
   .fiche .chev{color:var(--muted);transition:transform .2s var(--ease)}
   details.fiche[open] .chev{transform:rotate(180deg)}
-  .tag-urg{display:inline-block;font-family:var(--f-body);font-weight:600;font-size:.68rem;letter-spacing:.08em;text-transform:uppercase;color:var(--danger);border:1px solid rgba(240,122,98,.5);border-radius:999px;padding:1px 8px;margin-left:6px;vertical-align:2px}
+  .tag-urg{display:inline-block;font-family:var(--f-body);font-weight:600;font-size:.72rem;letter-spacing:.08em;text-transform:uppercase;color:var(--danger);border:1px solid rgba(240,122,98,.5);border-radius:999px;padding:1px 8px;margin-left:6px;vertical-align:2px}
   .fiche-body{padding:0 18px 20px;display:grid;gap:16px}
   .fiche-body .res{color:#e7ddcf}
   .blk h4{font-family:var(--f-body);font-size:.76rem;letter-spacing:.14em;text-transform:uppercase;color:var(--teal);margin-bottom:6px}
@@ -140,7 +140,7 @@
   .btn-amber:hover{background:var(--amber-soft)}
   .btn-ghost{border-color:var(--line);background:transparent}
   .btn-ghost:hover{border-color:var(--amber)}
-  .btn-s{padding:7px 13px;font-size:.84rem}
+  .btn-s{padding:7px 14px;font-size:.88rem;min-height:44px}
 
   /* Perdu · trouvé */
   .seg{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:4px;max-width:460px;background:var(--card);border:1px solid var(--line);border-radius:16px;padding:4px;margin-top:20px}
@@ -175,11 +175,11 @@
   @media (max-width:640px){.assos{grid-template-columns:1fr}}
   .asso{background:var(--card);border:1px solid var(--line);border-radius:var(--radius);padding:18px;display:flex;flex-direction:column;gap:8px;min-width:0}
   .asso .meta{display:flex;flex-wrap:wrap;gap:6px}
-  .pill{font-size:.72rem;letter-spacing:.06em;text-transform:uppercase;border-radius:999px;padding:3px 9px;border:1px solid var(--line);color:var(--muted)}
+  .pill{font-size:.76rem;letter-spacing:.06em;text-transform:uppercase;border-radius:999px;padding:3px 9px;border:1px solid var(--line);color:var(--muted)}
   .pill.t{color:var(--teal);border-color:rgba(31,182,166,.4)}
   .asso h3{font-size:1.18rem}
   .asso p{color:var(--muted);font-size:.94rem;flex:1}
-  .asso a.lien{font-size:.9rem;color:var(--amber-soft)}
+  .asso a.lien{font-size:.93rem;color:var(--amber-soft);display:inline-flex;align-items:center;min-height:44px}
   .invite{margin-top:18px;background:linear-gradient(135deg,rgba(232,161,58,.14),rgba(31,182,166,.10)),var(--card);border:1px solid rgba(232,161,58,.35);border-radius:var(--radius);padding:20px;display:grid;gap:10px}
 
   /* Carnet */
@@ -201,7 +201,7 @@
   .actions{display:flex;flex-wrap:wrap;gap:8px}
 
   footer.foot{border-top:1px solid var(--line);margin-top:30px;padding-block:24px;color:var(--muted);font-size:.86rem}
-  footer.foot a{color:var(--muted)}
+  footer.foot a{color:var(--muted);display:inline-block;padding-block:10px}
 </style>
 </head>
 <body>
