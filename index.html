@@ -87,6 +87,9 @@
 
   /* Galerie preuve */
   .proof{background:var(--bg2)}
+  .film{margin:30px 0 0}
+  .film video{display:block;width:100%;height:auto;aspect-ratio:1280/544;border-radius:var(--radius);background:#000;box-shadow:0 18px 40px rgba(0,0,0,.45)}
+  .film figcaption{color:var(--muted);font-size:.9rem;margin-top:10px}
   .gal{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-top:34px}
   .gal figure{position:relative;border-radius:14px;overflow:hidden;aspect-ratio:16/10;background:#000}
   .gal img{width:100%;height:100%;object-fit:cover;transition:.35s}
@@ -176,6 +179,12 @@
   <div class="wrap">
     <div class="kicker">Déjà dans la boîte</div>
     <h2>On sait déjà filmer le monde animal péi.</h2>
+    <figure class="film">
+      <video controls playsinline preload="none" poster="assets/concours-app.jpg" width="1280" height="544">
+        <source src="assets/video/katpat-chowchow-web.mp4" type="video/mp4" />
+      </video>
+      <figcaption>Le reportage Kat'Pat' au concours de chows-chows, La Réunion · 2 min 17</figcaption>
+    </figure>
     <div class="gal">
       <figure><img src="assets/presentatrice.jpg" alt="Présentation à la caméra" /><figcaption>Présentation &amp; plateau</figcaption></figure>
       <figure><img src="assets/concours.jpg" alt="Concours canin filmé" /><figcaption>Le concours, en grand</figcaption></figure>
@@ -197,11 +206,15 @@
       </li>
       <li>
         <div class="date">Novembre 2026</div>
+        <div class="what">Le reportage chow-chow est en ligne sur cette page, et Kat'Pat' a son logo : deux petites pattes à la place des apostrophes.</div>
+      </li>
+      <li>
+        <div class="date">Novembre 2026</div>
         <div class="what">Le carnet péi ouvre : fiches santé pour notre climat, perdu · trouvé avec le bon numéro par commune, les assos de l'île, et un carnet de rappels qui reste sur ton téléphone.</div>
       </li>
       <li>
         <div class="date">Prochaine étape</div>
-        <div class="what">Mettre en ligne notre showreel, et faire relire les fiches santé par un vétérinaire.</div>
+        <div class="what">Faire relire les fiches santé par un vétérinaire, et aller filmer les assos de l'île.</div>
       </li>
     </ol>
   </div>
