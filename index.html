@@ -5,12 +5,13 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 <!-- Au chaud : invisible des moteurs de recherche tant qu'on ne lance pas publiquement -->
 <meta name="robots" content="noindex, nofollow" />
-<title>Kat'Pat' — le monde animalier péi (chantier)</title>
-<meta name="description" content="Kat'Pat' : le rendez-vous des chiens & des chats à La Réunion. On filme, on informe, on met en lumière. Site en construction." />
-<link rel="preconnect" href="https://fonts.googleapis.com" />
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600;9..144,700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet" />
+<title>Kat'Pat' — le monde animalier péi</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22%3E%3Ctext y=%22.9em%22 font-size=%2290%22%3E🐾%3C/text%3E%3C/svg%3E" />
+<meta name="description" content="Kat'Pat' : le rendez-vous des chiens & des chats à La Réunion. On filme, on informe, on met en lumière. Le carnet péi est ouvert." />
 <style>
+  /* Polices custom auto-hébergées */
+  @font-face{font-family:"Fraunces";src:url("assets/fonts/fraunces-latin.woff2") format("woff2");font-weight:500 700;font-display:swap}
+  @font-face{font-family:"Inter";src:url("assets/fonts/inter-latin.woff2") format("woff2");font-weight:400 600;font-display:swap}
   :root{
     /* 🎨 Recolorable ici */
     --bg:#13110f;            /* fond gunmetal chaud */
@@ -73,7 +74,7 @@
   .mod .ico{font-size:2rem}
   .mod h3{font-size:1.32rem;margin:14px 0 8px}
   .mod p{color:var(--muted);font-size:.97rem}
-  .soon{display:inline-block;margin-top:16px;font-size:.72rem;letter-spacing:.12em;text-transform:uppercase;color:var(--teal);border:1px solid rgba(31,182,166,.4);border-radius:999px;padding:4px 12px}
+  .soon{text-decoration:none;display:inline-block;margin-top:16px;font-size:.72rem;letter-spacing:.12em;text-transform:uppercase;color:var(--teal);border:1px solid rgba(31,182,166,.4);border-radius:999px;padding:4px 12px}
 
   /* Galerie preuve */
   .proof{background:var(--bg2)}
@@ -114,14 +115,14 @@
 <header class="hero">
   <div class="hero-bg"></div>
   <div class="hero-in wrap">
-    <span class="badge">🚧 Le site se construit — reviens le voir grandir</span>
+    <span class="badge">🐾 Nouveau : le carnet péi est ouvert</span>
     <div class="eyebrow">La Réunion · Monde animalier</div>
     <h1>Kat'<span>Pat'</span></h1>
     <p class="lead">Le rendez-vous des chiens &amp; des chats péi.</p>
     <p class="sub">On filme, on informe, et on met en lumière celles et ceux qui font du bien aux animaux à La Réunion — des refuges aux éleveurs, des vétos aux familles.</p>
     <div class="btns">
-      <a class="btn btn-amber" href="#chantier">Voir le chantier 🐾</a>
-      <a class="btn btn-ghost" href="#preuve">Ce qu'on sait faire</a>
+      <a class="btn btn-amber" href="app.html">Ouvrir le carnet péi 🐾</a>
+      <a class="btn btn-ghost" href="app.html#perdu">Un animal perdu ?</a>
     </div>
   </div>
 </header>
@@ -137,26 +138,26 @@
 
 <section id="chantier">
   <div class="wrap">
-    <div class="kicker">Ce qu'on prépare</div>
+    <div class="kicker">C'est ouvert</div>
     <h2>Les premières briques.</h2>
     <div class="grid">
       <div class="mod">
         <div class="ico">🩺</div>
         <h3>Le carnet santé péi</h3>
         <p>Des conseils adaptés à notre climat (tiques, leptospirose, chaleur…). On t'oriente — c'est ton vétérinaire qui décide.</p>
-        <span class="soon">Bientôt</span>
+        <a class="soon" href="app.html#sante">Ouvrir →</a>
       </div>
       <div class="mod">
         <div class="ico">🔎</div>
         <h3>Perdu · Trouvé · À adopter</h3>
         <p>Une page claire, reliée aux groupes Facebook qui marchent et aux associations. On structure, on ne remplace pas.</p>
-        <span class="soon">Bientôt</span>
+        <a class="soon" href="app.html#perdu">Ouvrir →</a>
       </div>
       <div class="mod">
         <div class="ico">🤝</div>
         <h3>Les assos &amp; les pros</h3>
         <p>Les associations mises en lumière, et les bons professionnels (vétos, toiletteurs, pensions) près de chez toi.</p>
-        <span class="soon">Bientôt</span>
+        <a class="soon" href="app.html#assos">Ouvrir →</a>
       </div>
     </div>
   </div>
@@ -186,8 +187,12 @@
         <div class="what">Naissance du lien. Page d'accueil, identité Kat'Pat', et premières images de notre reportage chow-chow. Le squelette est en ligne.</div>
       </li>
       <li>
+        <div class="date">Novembre 2026</div>
+        <div class="what">Le carnet péi ouvre : fiches santé pour notre climat, perdu · trouvé avec le bon numéro par commune, les assos de l'île, et un carnet de rappels qui reste sur ton téléphone.</div>
+      </li>
+      <li>
         <div class="date">Prochaine étape</div>
-        <div class="what">Mettre en ligne notre showreel, et brancher la première brique utile (le carnet santé ou le perdu/trouvé).</div>
+        <div class="what">Mettre en ligne notre showreel, et faire relire les fiches santé par un vétérinaire.</div>
       </li>
     </ol>
   </div>

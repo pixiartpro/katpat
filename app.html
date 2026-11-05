@@ -1,0 +1,562 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+<!-- Au chaud : invisible des moteurs de recherche tant qu'on ne lance pas publiquement -->
+<meta name="robots" content="noindex, nofollow" />
+<meta name="theme-color" content="#13110f" />
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22%3E%3Ctext y=%22.9em%22 font-size=%2290%22%3E🐾%3C/text%3E%3C/svg%3E" />
+<title>Kat'Pat' — le carnet péi du chien et du chat</title>
+<meta name="description" content="Santé adaptée à La Réunion, perdu, trouvé, à adopter, et les assos de l'île. On t'oriente ; c'est ton vétérinaire qui décide." />
+<style>
+  /* Polices custom auto-hébergées */
+  @font-face{font-family:"Fraunces";src:url("assets/fonts/fraunces-latin.woff2") format("woff2");font-weight:500 700;font-display:swap}
+  @font-face{font-family:"Inter";src:url("assets/fonts/inter-latin.woff2") format("woff2");font-weight:400 600;font-display:swap}
+
+  /* Pour re-colorier l'appli, change SEULEMENT ci-dessous (mêmes couleurs que la page d'accueil) */
+  :root{
+    --bg:#13110f; --bg2:#1c1815; --card:#221d19; --card2:#2a241f;
+    --ink:#f5ede2; --muted:#b6a692; --line:rgba(255,255,255,.10);
+    --amber:#e8a13a; --amber-soft:#f2c277; --teal:#1fb6a6;
+    --danger:#f07a62; --danger-bg:rgba(240,122,98,.12);
+    --radius:20px; --radius-s:14px; --maxw:1080px;
+    --ease:cubic-bezier(.22,.61,.36,1);
+    --shadow:0 10px 30px rgba(0,0,0,.35);
+    --f-display:"Fraunces", Georgia, "Times New Roman", serif;
+    --f-body:"Inter", system-ui, -apple-system, "Segoe UI", sans-serif;
+    color-scheme:dark;
+  }
+  /* Universel : mouvement réduit = pas de déplacement */
+  @media (prefers-reduced-motion: reduce){
+    *,*::before,*::after{transition-duration:0s!important;transition-delay:0s!important;animation-duration:0s!important;animation-delay:0s!important;scroll-behavior:auto!important}
+  }
+
+  *{box-sizing:border-box;margin:0;padding:0}
+  html{scroll-behavior:smooth;-webkit-text-size-adjust:100%}
+  body{background:var(--bg);color:var(--ink);font-family:var(--f-body);font-size:16px;line-height:1.6;-webkit-font-smoothing:antialiased;
+    padding-bottom:calc(84px + env(safe-area-inset-bottom,0px))}
+  a{color:inherit}
+  button,input,select,textarea{font:inherit;color:inherit}
+  .wrap{max-width:var(--maxw);margin:0 auto;padding-left:max(18px,env(safe-area-inset-left,0px));padding-right:max(18px,env(safe-area-inset-right,0px))}
+  h1,h2,h3{font-family:var(--f-display);font-weight:600;line-height:1.12;letter-spacing:-.015em;text-wrap:balance}
+  :focus-visible{outline:2px solid var(--amber);outline-offset:3px;border-radius:6px}
+
+  /* En-tête */
+  body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);z-index:41;background:var(--bg)}
+  .top{position:sticky;top:env(safe-area-inset-top,0px);z-index:40;background:rgba(19,17,15,.82);-webkit-backdrop-filter:blur(10px);backdrop-filter:blur(10px);border-bottom:1px solid var(--line)}
+  .top-in{display:flex;align-items:center;justify-content:space-between;height:60px;gap:12px}
+  .logo{font-family:var(--f-display);font-weight:700;font-size:1.3rem;text-decoration:none;letter-spacing:-.01em}
+  .logo span{color:var(--amber)}
+  .logo small{display:block;font-family:var(--f-body);font-weight:500;font-size:.58rem;letter-spacing:.26em;text-transform:uppercase;color:var(--muted);margin-top:-3px}
+  .tabs-top{display:flex;gap:6px}
+  .tabs-top a{font-size:.9rem;color:var(--muted);text-decoration:none;padding:8px 14px;border-radius:999px;border:1px solid transparent;transition:color .2s var(--ease),border-color .2s var(--ease)}
+  .tabs-top a[aria-current="page"]{color:var(--ink);border-color:rgba(232,161,58,.5)}
+  @media (max-width:780px){.tabs-top{display:none}}
+
+  /* Barre d'onglets du téléphone */
+  .tabbar{position:fixed;left:0;right:0;bottom:0;z-index:40;background:rgba(28,24,21,.94);-webkit-backdrop-filter:blur(12px);backdrop-filter:blur(12px);border-top:1px solid var(--line);
+    padding:6px max(8px,env(safe-area-inset-right,0px)) calc(6px + env(safe-area-inset-bottom,0px)) max(8px,env(safe-area-inset-left,0px));display:none}
+  .tabbar nav{display:grid;grid-template-columns:repeat(4,1fr);max-width:520px;margin:0 auto}
+  .tabbar a{display:flex;flex-direction:column;align-items:center;gap:2px;padding:6px 2px;text-decoration:none;font-size:.72rem;color:var(--muted);border-radius:12px;transition:transform .15s var(--ease),color .15s var(--ease)}
+  .tabbar a .i{font-size:1.35rem;line-height:1.1}
+  .tabbar a:active{transform:scale(.94)}
+  .tabbar a[aria-current="page"]{color:var(--amber-soft)}
+  @media (max-width:780px){.tabbar{display:block}}
+  @media (min-width:781px){body{padding-bottom:40px}}
+
+  /* Vues */
+  .view{padding-block:28px 24px}
+  .view[hidden]{display:none!important}
+  .kicker{color:var(--teal);font-weight:600;font-size:.76rem;letter-spacing:.2em;text-transform:uppercase;margin-bottom:8px}
+  .view h1{font-size:clamp(2rem,6vw,2.8rem);margin-bottom:10px}
+  .lead{color:#e7ddcf;font-size:1.06rem;max-width:62ch}
+  .muted{color:var(--muted)}
+  .small{font-size:.88rem}
+
+  /* Bandeau véto */
+  .veto{display:flex;gap:12px;align-items:flex-start;background:var(--card);border:1px solid var(--line);border-radius:var(--radius-s);padding:14px 16px;margin-top:18px;font-size:.95rem}
+  .veto b{color:var(--amber-soft)}
+
+  /* Accueil de l'appli */
+  .hero-app{display:grid;grid-template-columns:1.1fr .9fr;gap:28px;align-items:center}
+  .hero-app img{width:100%;height:auto;aspect-ratio:4/3;object-fit:cover;object-position:62% 60%;border-radius:var(--radius);max-width:100%;box-shadow:var(--shadow)}
+  @media (max-width:780px){.hero-app{grid-template-columns:1fr}.hero-app img{aspect-ratio:16/9}}
+  .doors{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px;margin-top:26px}
+  @media (max-width:560px){.doors{grid-template-columns:1fr}}
+  .door{display:flex;gap:14px;align-items:flex-start;background:var(--card);border:1px solid var(--line);border-radius:var(--radius);padding:18px;text-decoration:none;transition:border-color .2s var(--ease),transform .15s var(--ease)}
+  .door:hover{border-color:rgba(232,161,58,.45)}
+  .door:active{transform:scale(.98)}
+  .door .i{font-size:1.8rem;line-height:1}
+  .door h3{font-size:1.18rem;margin-bottom:4px}
+  .door p{color:var(--muted);font-size:.93rem}
+  .door.sos{border-color:rgba(240,122,98,.45);background:linear-gradient(0deg,var(--danger-bg),var(--danger-bg)),var(--card)}
+
+  /* Santé */
+  .filters{display:flex;flex-wrap:wrap;gap:8px;margin-top:20px}
+  .chip{border:1px solid var(--line);background:var(--card);border-radius:999px;padding:8px 14px;font-size:.88rem;cursor:pointer;transition:border-color .2s var(--ease),transform .15s var(--ease)}
+  .chip:active{transform:scale(.96)}
+  .chip[aria-pressed="true"]{border-color:var(--amber);color:var(--amber-soft)}
+  .fiches{display:grid;gap:12px;margin-top:18px}
+  details.fiche{background:var(--card);border:1px solid var(--line);border-radius:var(--radius);overflow:hidden}
+  details.fiche[open]{border-color:rgba(232,161,58,.4)}
+  details.fiche summary{list-style:none;cursor:pointer;display:grid;grid-template-columns:auto minmax(0,1fr) auto;gap:14px;align-items:center;padding:16px 18px}
+  details.fiche summary::-webkit-details-marker{display:none}
+  .fiche .em{font-size:1.7rem;line-height:1}
+  .fiche h3{font-size:1.15rem}
+  .fiche .pour{font-size:.8rem;color:var(--muted)}
+  .fiche .chev{color:var(--muted);transition:transform .2s var(--ease)}
+  details.fiche[open] .chev{transform:rotate(180deg)}
+  .tag-urg{display:inline-block;font-family:var(--f-body);font-weight:600;font-size:.68rem;letter-spacing:.08em;text-transform:uppercase;color:var(--danger);border:1px solid rgba(240,122,98,.5);border-radius:999px;padding:1px 8px;margin-left:6px;vertical-align:2px}
+  .fiche-body{padding:0 18px 20px;display:grid;gap:16px}
+  .fiche-body .res{color:#e7ddcf}
+  .blk h4{font-family:var(--f-body);font-size:.76rem;letter-spacing:.14em;text-transform:uppercase;color:var(--teal);margin-bottom:6px}
+  .blk ul{padding-left:20px;display:grid;gap:4px}
+  .blk.faire{background:var(--card2);border-radius:var(--radius-s);padding:14px 16px}
+  .blk.faire h4{color:var(--amber-soft)}
+  .blk.eviter h4{color:var(--danger)}
+  .src{font-size:.82rem;color:var(--muted)}
+  .src a{color:var(--muted)}
+  .tel-list{display:grid;gap:8px}
+  .tel{display:flex;flex-wrap:wrap;justify-content:space-between;align-items:center;gap:8px;background:var(--bg2);border:1px solid var(--line);border-radius:12px;padding:10px 14px}
+  .tel b{font-variant-numeric:tabular-nums;font-size:1.05rem;letter-spacing:.02em;user-select:all}
+  .btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;border:1px solid transparent;border-radius:999px;padding:11px 18px;font-weight:600;font-size:.93rem;cursor:pointer;text-decoration:none;transition:background-color .2s var(--ease),transform .15s var(--ease),border-color .2s var(--ease)}
+  .btn:active{transform:scale(.97)}
+  .btn-amber{background:var(--amber);color:#1a1510}
+  .btn-amber:hover{background:var(--amber-soft)}
+  .btn-ghost{border-color:var(--line);background:transparent}
+  .btn-ghost:hover{border-color:var(--amber)}
+  .btn-s{padding:7px 13px;font-size:.84rem}
+
+  /* Perdu · trouvé */
+  .seg{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:4px;max-width:460px;background:var(--card);border:1px solid var(--line);border-radius:16px;padding:4px;margin-top:20px}
+  .seg button{border:0;background:transparent;border-radius:12px;padding:10px 6px;white-space:nowrap;font-size:.92rem;cursor:pointer;color:var(--muted);font-weight:500;transition:background-color .2s var(--ease),color .2s var(--ease),transform .15s var(--ease)}
+  .seg button:active{transform:scale(.96)}
+  .seg button[aria-selected="true"]{background:var(--amber);color:#1a1510}
+  .panel{margin-top:20px;display:grid;grid-template-columns:minmax(0,1.15fr) minmax(0,.85fr);gap:18px;align-items:start}
+  @media (max-width:860px){.panel{grid-template-columns:1fr}}
+  .card{background:var(--card);border:1px solid var(--line);border-radius:var(--radius);padding:20px;min-width:0}
+  .card h2{font-size:1.4rem;margin-bottom:12px}
+  .card h3{font-size:1.1rem;margin-bottom:8px}
+  ol.steps{counter-reset:s;list-style:none;display:grid;gap:14px}
+  ol.steps li{counter-increment:s;display:grid;grid-template-columns:34px minmax(0,1fr);gap:12px}
+  ol.steps li::before{content:counter(s);width:30px;height:30px;border-radius:50%;background:var(--card2);border:1px solid rgba(232,161,58,.4);color:var(--amber-soft);display:grid;place-items:center;font-weight:600;font-size:.88rem}
+  ol.steps b{display:block}
+  ol.steps span{color:var(--muted);font-size:.94rem}
+  label{display:block;font-size:.84rem;color:var(--muted);margin-bottom:5px}
+  input,select,textarea{width:100%;background:var(--bg2);border:1px solid var(--line);border-radius:12px;padding:11px 13px;font-size:16px;transition:border-color .2s var(--ease)}
+  input:focus,select:focus,textarea:focus{border-color:var(--amber);outline:none}
+  .field{margin-bottom:12px}
+  .row2{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+  @media (max-width:420px){.row2{grid-template-columns:1fr}}
+  .contact{margin-top:12px;display:grid;gap:8px}
+  .contact .mail{font-size:.92rem;color:var(--muted);word-break:break-all}
+  .annonce{white-space:pre-wrap;background:var(--bg2);border:1px dashed rgba(232,161,58,.45);border-radius:12px;padding:14px;font-size:.95rem;min-height:120px}
+  .note-p{font-size:.84rem;color:var(--muted);margin-top:8px}
+  .toast{position:fixed;left:50%;bottom:calc(96px + env(safe-area-inset-bottom,0px));transform:translateX(-50%);background:var(--ink);color:var(--bg);padding:10px 16px;border-radius:999px;font-weight:600;font-size:.9rem;z-index:60;opacity:0;pointer-events:none;transition:opacity .2s var(--ease)}
+  .toast.on{opacity:1}
+
+  /* Assos */
+  .assos{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px;margin-top:20px}
+  @media (max-width:640px){.assos{grid-template-columns:1fr}}
+  .asso{background:var(--card);border:1px solid var(--line);border-radius:var(--radius);padding:18px;display:flex;flex-direction:column;gap:8px;min-width:0}
+  .asso .meta{display:flex;flex-wrap:wrap;gap:6px}
+  .pill{font-size:.72rem;letter-spacing:.06em;text-transform:uppercase;border-radius:999px;padding:3px 9px;border:1px solid var(--line);color:var(--muted)}
+  .pill.t{color:var(--teal);border-color:rgba(31,182,166,.4)}
+  .asso h3{font-size:1.18rem}
+  .asso p{color:var(--muted);font-size:.94rem;flex:1}
+  .asso a.lien{font-size:.9rem;color:var(--amber-soft)}
+  .invite{margin-top:18px;background:linear-gradient(135deg,rgba(232,161,58,.14),rgba(31,182,166,.10)),var(--card);border:1px solid rgba(232,161,58,.35);border-radius:var(--radius);padding:20px;display:grid;gap:10px}
+
+  /* Carnet */
+  .carnet-grid{display:grid;grid-template-columns:minmax(0,.9fr) minmax(0,1.1fr);gap:18px;margin-top:20px;align-items:start}
+  @media (max-width:860px){.carnet-grid{grid-template-columns:1fr}#animaux{order:-1}}
+  .animal{background:var(--card);border:1px solid var(--line);border-radius:var(--radius);padding:18px;display:grid;gap:12px}
+  .animal-h{display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap}
+  .animal-h h3{font-size:1.3rem}
+  .rappels{display:grid;gap:8px}
+  .rap{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:10px;align-items:center;background:var(--bg2);border:1px solid var(--line);border-radius:12px;padding:10px 12px}
+  .rap .l b{display:block;font-weight:600;font-size:.95rem}
+  .rap .l span{font-size:.84rem;color:var(--muted);font-variant-numeric:tabular-nums}
+  .etat{font-size:.74rem;font-weight:600;border-radius:999px;padding:3px 9px;white-space:nowrap}
+  .etat.ok{background:rgba(31,182,166,.15);color:var(--teal)}
+  .etat.bientot{background:rgba(232,161,58,.16);color:var(--amber-soft)}
+  .etat.retard{background:var(--danger-bg);color:var(--danger)}
+  .etat.vide{background:var(--card2);color:var(--muted)}
+  .empty{border:1px dashed var(--line);border-radius:var(--radius);padding:24px;text-align:center;color:var(--muted)}
+  .actions{display:flex;flex-wrap:wrap;gap:8px}
+
+  footer.foot{border-top:1px solid var(--line);margin-top:30px;padding-block:24px;color:var(--muted);font-size:.86rem}
+  footer.foot a{color:var(--muted)}
+</style>
+</head>
+<body>
+
+<header class="top">
+  <div class="wrap top-in">
+    <a class="logo" href="index.html">Kat'<span>Pat'</span><small>un Monde Pixie</small></a>
+    <nav class="tabs-top" aria-label="Rubriques">
+      <a href="#sante" data-v="sante">Santé péi</a>
+      <a href="#perdu" data-v="perdu">Perdu · Trouvé</a>
+      <a href="#assos" data-v="assos">Les assos</a>
+      <a href="#carnet" data-v="carnet">Mon carnet</a>
+    </nav>
+  </div>
+</header>
+
+<main>
+  <!-- ACCUEIL -->
+  <section class="view wrap" id="v-accueil">
+    <div class="hero-app">
+      <div>
+        <div class="kicker">La Réunion · chiens &amp; chats</div>
+        <h1>Le carnet péi de ton animal.</h1>
+        <p class="lead">Les bons réflexes santé pour notre climat, quoi faire quand un animal est perdu ou trouvé, et les assos de l'île. Gratuit, sans compte.</p>
+      </div>
+      <img src="assets/concours-app.jpg" alt="Deux chows-chows présentés lors d'un concours canin à La Réunion" width="1400" height="589" />
+    </div>
+    <div class="doors">
+      <a class="door sos" href="#perdu"><span class="i">🔎</span><div><h3>Un animal perdu ou trouvé ?</h3><p>Les 3 gestes, et le bon numéro selon ta commune.</p></div></a>
+      <a class="door" href="#sante"><span class="i">🩺</span><div><h3>Santé péi</h3><p>Chaleur, crapaud, leptospirose, tiques, cyclone : quoi surveiller.</p></div></a>
+      <a class="door" href="#assos"><span class="i">🤝</span><div><h3>Les assos de l'île</h3><p>Adopter, aider, devenir famille d'accueil.</p></div></a>
+      <a class="door" href="#carnet"><span class="i">📒</span><div><h3>Mon carnet</h3><p>Vaccins, anti-tiques, vermifuge : les rappels de ton animal.</p></div></a>
+    </div>
+    <div class="veto"><span>🩺</span><p><b>On t'oriente, ton vétérinaire décide.</b> Kat'Pat' ne pose jamais de diagnostic. En cas de doute, appelle ton vétérinaire.</p></div>
+  </section>
+
+  <!-- SANTÉ -->
+  <section class="view wrap" id="v-sante" hidden>
+    <div class="kicker">Santé péi</div>
+    <h1>Les réflexes pour notre climat.</h1>
+    <p class="lead">Chaud, humide, sans hiver : à La Réunion, certains dangers sont là toute l'année. Ouvre une fiche pour savoir quoi surveiller et quoi faire.</p>
+    <div class="veto"><span>🩺</span><p><b>Ces fiches ne remplacent pas ton vétérinaire.</b> Elles t'aident à reconnaître une urgence et à préparer ta question.</p></div>
+    <div class="filters" role="group" aria-label="Filtrer les fiches">
+      <button class="chip" type="button" data-f="tout" aria-pressed="true">Tout</button>
+      <button class="chip" type="button" data-f="urgence" aria-pressed="false">Urgences</button>
+      <button class="chip" type="button" data-f="chien" aria-pressed="false">Chien</button>
+      <button class="chip" type="button" data-f="chat" aria-pressed="false">Chat</button>
+    </div>
+    <div class="fiches" id="fiches"></div>
+    <div class="card" style="margin-top:18px">
+      <h3>☎️ Centres antipoison vétérinaires</h3>
+      <p class="muted small" style="margin-bottom:10px">Ouverts de 8 h 30 à minuit, heure de métropole. Ton vétérinaire reste le premier à appeler.</p>
+      <div class="tel-list" id="antipoison"></div>
+    </div>
+  </section>
+
+  <!-- PERDU / TROUVÉ / ADOPTER -->
+  <section class="view wrap" id="v-perdu" hidden>
+    <div class="kicker">Perdu · Trouvé · À adopter</div>
+    <h1>Ramener chaque animal chez lui.</h1>
+    <p class="lead">Les bons gestes dans l'ordre, et le bon contact selon ta commune. Pour diffuser une annonce, on passe par les groupes Facebook de ton quartier : on ne les remplace pas.</p>
+    <div class="seg" role="tablist" aria-label="Ta situation">
+      <button type="button" role="tab" id="t-perdu" aria-selected="true" data-s="perdu">J'ai perdu</button>
+      <button type="button" role="tab" id="t-trouve" aria-selected="false" data-s="trouve">J'ai trouvé</button>
+      <button type="button" role="tab" id="t-adopter" aria-selected="false" data-s="adopter">J'adopte</button>
+    </div>
+
+    <div class="panel">
+      <div class="card" id="steps-card"></div>
+      <div style="display:grid;gap:18px;min-width:0">
+        <div class="card">
+          <h3>📍 Ta commune</h3>
+          <label for="commune">Choisis ta commune pour avoir le bon numéro (fourrière, errance, stérilisation aidée)</label>
+          <select id="commune"><option value="">Choisir…</option></select>
+          <div class="contact" id="contact"></div>
+        </div>
+        <div class="card" id="annonce-card">
+          <h3>📝 Préparer l'annonce</h3>
+          <p class="muted small" style="margin-bottom:12px">Remplis, copie, colle dans les groupes Facebook de ta commune. Rien n'est envoyé : tout reste sur ton téléphone.</p>
+          <div class="row2">
+            <div class="field"><label for="a-espece">Animal</label><select id="a-espece"><option>Chien</option><option>Chat</option></select></div>
+            <div class="field"><label for="a-nom">Nom (si connu)</label><input id="a-nom" autocomplete="off" placeholder="Ex. Tiboy" /></div>
+          </div>
+          <div class="field"><label for="a-desc">Description</label><input id="a-desc" autocomplete="off" placeholder="Ex. mâle, roux, collier bleu, boite un peu" /></div>
+          <div class="row2">
+            <div class="field"><label for="a-lieu">Où ?</label><input id="a-lieu" autocomplete="off" placeholder="Ex. près de l'école, La Saline" /></div>
+            <div class="field"><label for="a-date">Quand ?</label><input id="a-date" type="date" /></div>
+          </div>
+          <div class="field"><label for="a-tel">Ton numéro (pour qu'on te rappelle)</label><input id="a-tel" type="tel" autocomplete="off" placeholder="Ex. 0692 00 00 00" /></div>
+          <div class="annonce" id="annonce" aria-live="polite"></div>
+          <div class="actions" style="margin-top:10px"><button class="btn btn-amber" type="button" id="copier">Copier l'annonce</button></div>
+          <p class="note-p">Astuce : ajoute une photo nette dans ton post, et donne le numéro de puce seulement à la fourrière ou au vétérinaire.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ASSOS -->
+  <section class="view wrap" id="v-assos" hidden>
+    <div class="kicker">Les assos de l'île</div>
+    <h1>Celles et ceux qui sauvent nos animaux.</h1>
+    <p class="lead">Adopter, devenir famille d'accueil, donner un coup de main : passe par elles. Kat'Pat' les met en lumière, elles restent aux commandes.</p>
+    <div class="assos" id="assos"></div>
+    <p class="muted small" style="margin-top:14px" id="refuges"></p>
+    <div class="invite">
+      <h3>Tu fais partie d'une asso ?</h3>
+      <p class="muted">On vient filmer vos animaux à adopter et votre travail, gratuitement, pour les faire connaître. Écris-nous, et dis-nous aussi si une info ici est à corriger.</p>
+      <p><b style="user-select:all">pix.i.art.pro@gmail.com</b></p>
+    </div>
+  </section>
+
+  <!-- CARNET -->
+  <section class="view wrap" id="v-carnet" hidden>
+    <div class="kicker">Mon carnet</div>
+    <h1>Les rappels de ton animal.</h1>
+    <p class="lead">Note la date du dernier vaccin, de l'anti-tiques et du vermifuge. Kat'Pat' te montre ce qui arrive bientôt.</p>
+    <div class="veto"><span>🔒</span><p><b>Ton carnet reste sur ton téléphone.</b> Rien n'est envoyé, il n'y a pas de compte. Si tu vides les données de ton navigateur, le carnet s'efface. Les rythmes sont ceux que <b>ton vétérinaire</b> t'a donnés.</p></div>
+    <div class="carnet-grid">
+      <form class="card" id="f-animal" autocomplete="off">
+        <h3 id="f-titre">Ajouter un animal</h3>
+        <div class="row2">
+          <div class="field"><label for="c-nom">Son nom</label><input id="c-nom" required maxlength="40" placeholder="Ex. Moka" /></div>
+          <div class="field"><label for="c-espece">Animal</label><select id="c-espece"><option>Chien</option><option>Chat</option></select></div>
+        </div>
+        <div class="field"><label for="c-puce">Numéro de puce (facultatif)</label><input id="c-puce" inputmode="numeric" maxlength="20" placeholder="15 chiffres" /></div>
+        <div class="row2">
+          <div class="field"><label for="c-vaccin">Dernier vaccin</label><input id="c-vaccin" type="date" /></div>
+          <div class="field"><label for="c-vaccin-m">Tous les (mois)</label><input id="c-vaccin-m" type="number" min="1" max="36" value="12" /></div>
+        </div>
+        <div class="row2">
+          <div class="field"><label for="c-tiques">Dernier anti-tiques</label><input id="c-tiques" type="date" /></div>
+          <div class="field"><label for="c-tiques-m">Tous les (mois)</label><input id="c-tiques-m" type="number" min="1" max="12" value="1" /></div>
+        </div>
+        <div class="row2">
+          <div class="field"><label for="c-verm">Dernier vermifuge</label><input id="c-verm" type="date" /></div>
+          <div class="field"><label for="c-verm-m">Tous les (mois)</label><input id="c-verm-m" type="number" min="1" max="12" value="3" /></div>
+        </div>
+        <p class="note-p" style="margin:-2px 0 12px">Les chiffres proposés sont des exemples : mets ceux de ton vétérinaire.</p>
+        <div class="actions">
+          <button class="btn btn-amber" type="submit" id="c-save">Enregistrer</button>
+          <button class="btn btn-ghost" type="button" id="c-cancel" hidden>Annuler</button>
+        </div>
+      </form>
+      <div id="animaux" style="display:grid;gap:14px;min-width:0"></div>
+    </div>
+  </section>
+</main>
+
+<footer class="foot">
+  <div class="wrap">
+    <p>Kat'Pat' fait partie des <b>Mondes Pixie</b> · produit par PIX-I-ART · La Réunion 🌴 · Infos à jour au <span id="maj"></span>.</p>
+    <p style="margin-top:6px">Kat'Pat' oriente et ne remplace jamais un vétérinaire. Une info à corriger ? <span style="user-select:all">pix.i.art.pro@gmail.com</span></p>
+  </div>
+</footer>
+
+<div class="tabbar">
+  <nav aria-label="Rubriques">
+    <a href="#sante" data-v="sante"><span class="i">🩺</span>Santé</a>
+    <a href="#perdu" data-v="perdu"><span class="i">🔎</span>Perdu</a>
+    <a href="#assos" data-v="assos"><span class="i">🤝</span>Assos</a>
+    <a href="#carnet" data-v="carnet"><span class="i">📒</span>Carnet</a>
+  </nav>
+</div>
+<div class="toast" id="toast" role="status"></div>
+
+<script src="data/donnees.js"></script>
+<script>
+(function(){
+  "use strict";
+  var KP = window.KP || {};
+  var $ = function(s, r){ return (r||document).querySelector(s); };
+  var $$ = function(s, r){ return Array.prototype.slice.call((r||document).querySelectorAll(s)); };
+  function esc(t){ return String(t == null ? "" : t).replace(/[&<>"']/g, function(c){ return {"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]; }); }
+  document.addEventListener("touchstart", function(){}, {passive:true}); /* iOS : active les retours à l'appui */
+
+  /* ---------- Navigation par onglets (#sante, #perdu, #assos, #carnet) ---------- */
+  var VUES = ["accueil","sante","perdu","assos","carnet"];
+  function montrer(){
+    var v = (location.hash || "").replace("#","");
+    if (VUES.indexOf(v) < 0) v = "accueil";
+    VUES.forEach(function(n){ var el = document.getElementById("v-"+n); if (el) el.hidden = (n !== v); });
+    $$("[data-v]").forEach(function(a){ if (a.getAttribute("data-v") === v) a.setAttribute("aria-current","page"); else a.removeAttribute("aria-current"); });
+    window.scrollTo(0,0);
+  }
+  try { history.scrollRestoration = "manual"; } catch(e){}
+  window.addEventListener("hashchange", montrer);
+
+  /* ---------- Petit message ---------- */
+  var tt;
+  function toast(m){ var t = $("#toast"); t.textContent = m; t.classList.add("on"); clearTimeout(tt); tt = setTimeout(function(){ t.classList.remove("on"); }, 1800); }
+  function copier(texte){
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+      navigator.clipboard.writeText(texte).then(function(){ toast("Copié ✓"); }, function(){ selection(); });
+    } else selection();
+    function selection(){ var r = document.createRange(); r.selectNodeContents($("#annonce")); var s = getSelection(); s.removeAllRanges(); s.addRange(r); toast("Texte sélectionné : copie-le"); }
+  }
+
+  /* ---------- Santé ---------- */
+  function liste(titre, items, cls){
+    if (!items || !items.length) return "";
+    return '<div class="blk '+(cls||"")+'"><h4>'+titre+'</h4><ul>'+items.map(function(i){ return "<li>"+esc(i)+"</li>"; }).join("")+"</ul></div>";
+  }
+  function telsAntipoison(){
+    return '<div class="tel-list">'+(KP.antipoison||[]).map(function(a){ return '<div class="tel"><span>'+esc(a.nom)+'</span><b>'+esc(a.tel)+'</b></div>'; }).join("")+"</div>";
+  }
+  function rendreFiches(filtre){
+    var html = (KP.fiches||[]).filter(function(f){
+      if (filtre === "urgence") return f.urgence;
+      if (filtre === "chien") return /chien/.test(f.pour);
+      if (filtre === "chat") return /chat/.test(f.pour);
+      return true;
+    }).map(function(f){
+      var src = (f.sources||[]).length ? '<p class="src">Sources : '+f.sources.map(function(s){ return '<a href="'+esc(s.url)+'" target="_blank" rel="noopener">'+esc(s.nom)+'</a>'; }).join(" · ")+'</p>' : "";
+      return '<details class="fiche" id="f-'+esc(f.id)+'"><summary><span class="em" aria-hidden="true">'+f.emoji+'</span><div><h3>'+esc(f.titre)+(f.urgence?'<span class="tag-urg">urgence</span>':'')+'</h3><span class="pour">'+esc(f.pour)+'</span></div><span class="chev" aria-hidden="true">▾</span></summary>'+
+        '<div class="fiche-body"><p class="res">'+esc(f.resume)+'</p>'+
+        liste("Ce qu'il faut savoir", f.savoir)+
+        liste("Les signes qui doivent t'alerter", f.signes)+
+        liste("Ce que tu peux faire tout de suite", f.faire, "faire")+
+        liste("À éviter", f.eviter, "eviter")+
+        (f.antipoison ? '<div class="blk"><h4>Centres antipoison vétérinaires</h4>'+telsAntipoison()+'</div>' : "")+
+        src+'</div></details>';
+    }).join("");
+    $("#fiches").innerHTML = html || '<p class="muted">Aucune fiche pour ce filtre.</p>';
+  }
+  $$(".chip").forEach(function(b){
+    b.addEventListener("click", function(){
+      $$(".chip").forEach(function(x){ x.setAttribute("aria-pressed","false"); });
+      b.setAttribute("aria-pressed","true");
+      rendreFiches(b.getAttribute("data-f"));
+    });
+  });
+
+  /* ---------- Perdu / trouvé / adopter ---------- */
+  var ETAPES = {
+    perdu: { titre: "Tu as perdu ton animal", items: [
+      ["Cherche tout de suite autour de chez toi", "Appelle-le, demande aux voisins, regarde sous les voitures et dans les ravines proches. Un animal qui a peur se cache souvent tout près."],
+      ["Déclare la perte sur I-CAD", "Si ton animal est pucé, déclare-le perdu dans ton espace sur i-cad.fr. Vétérinaires, fourrières et assos sont prévenus quand ils lisent sa puce."],
+      ["Appelle la fourrière de ta commune", "Choisis ta commune à côté pour avoir le numéro. Sans nouvelles, rappelle tous les 2 jours : au bout de 8 jours ouvrés en fourrière, un animal non réclamé est considéré comme abandonné."],
+      ["Publie une annonce", "Prépare-la à côté, puis colle-la dans les groupes Facebook de ta commune avec une photo nette."],
+      ["Quand il est rentré", "Déclare-le « retrouvé » sur I-CAD, sinon il reste noté comme perdu. Et pense à retirer tes annonces."]
+    ], liens: [["Déclarer sur I-CAD", "https://www.i-cad.fr"]] },
+    trouve: { titre: "Tu as trouvé un animal", items: [
+      ["Approche doucement", "Sans le brusquer. S'il est blessé ou agressif, ne prends pas de risque : appelle la fourrière."],
+      ["Fais lire sa puce", "N'importe quel vétérinaire lit la puce gratuitement en quelques secondes. S'il est pucé, le propriétaire est prévenu par I-CAD."],
+      ["Pas de puce ? Préviens la fourrière", "Choisis ta commune à côté pour avoir le numéro. C'est le circuit officiel pour que sa famille le retrouve, même si tu le gardes le temps de chercher."],
+      ["Publie une annonce « trouvé »", "Dans les groupes Facebook de ta commune, avec une photo. Garde un détail pour toi (une tache, une cicatrice) : ça permet de vérifier le vrai propriétaire."],
+      ["Un animal errant, pas perdu ?", "Signale-le sur stoperrance.re : ton signalement part vers les services de ta commune."]
+    ], liens: [["Signaler sur StopErrance.re", "https://www.stoperrance.re"]] },
+    adopter: { titre: "Tu veux adopter", items: [
+      ["Adopte auprès d'une asso ou d'un refuge", "L'animal est en général vacciné, pucé et souvent stérilisé, et l'asso t'aide à choisir celui qui va avec ta vie."],
+      ["Pense à la chaleur et à ta maison", "Un chien à poil épais ou à nez écrasé souffre plus de notre climat. Un jardin bien fermé évite les fugues."],
+      ["Prévois le budget", "Vétérinaire, anti-tiques toute l'année, nourriture : demande une estimation à ton vétérinaire avant de t'engager."],
+      ["La puce est obligatoire", "Vérifie que l'animal est identifié et que la carte I-CAD passe bien à ton nom."],
+      ["Stérilisation aidée", "Si tu n'es pas imposable, ton intercommunalité peut stériliser ton animal gratuitement. Choisis ta commune à côté pour le numéro."]
+    ], liens: [["Voir les assos de l'île", "#assos"]] }
+  };
+  var situation = "perdu";
+  function rendreEtapes(){
+    var e = ETAPES[situation];
+    $("#steps-card").innerHTML = '<h2>'+esc(e.titre)+'</h2><ol class="steps">'+e.items.map(function(i){ return '<li><div><b>'+esc(i[0])+'</b><span>'+esc(i[1])+'</span></div></li>'; }).join("")+'</ol>'+
+      '<div class="actions" style="margin-top:18px">'+e.liens.map(function(l){ var ext = l[1].charAt(0) !== "#"; return '<a class="btn btn-ghost btn-s" href="'+esc(l[1])+'"'+(ext?' target="_blank" rel="noopener"':'')+'>'+esc(l[0])+(ext?' ↗':'')+'</a>'; }).join("")+'</div>';
+    $("#annonce-card").hidden = (situation === "adopter");
+    majAnnonce();
+  }
+  $$(".seg button").forEach(function(b){
+    b.addEventListener("click", function(){
+      $$(".seg button").forEach(function(x){ x.setAttribute("aria-selected","false"); });
+      b.setAttribute("aria-selected","true");
+      situation = b.getAttribute("data-s");
+      rendreEtapes();
+    });
+  });
+  function rendreCommunes(){
+    var sel = $("#commune");
+    Object.keys(KP.communes||{}).sort(function(a,b){ return a.localeCompare(b,"fr"); }).forEach(function(c){ var o = document.createElement("option"); o.value = c; o.textContent = c; sel.appendChild(o); });
+    sel.addEventListener("change", function(){ rendreContact(sel.value); memo("kp_commune", sel.value); });
+    var m = lire("kp_commune"); if (m && KP.communes[m]) { sel.value = m; rendreContact(m); }
+  }
+  function rendreContact(c){
+    var box = $("#contact");
+    if (!c) { box.innerHTML = ""; return; }
+    var i = KP.intercos[KP.communes[c]];
+    box.innerHTML = '<p class="small muted">'+esc(c)+' dépend <b style="color:var(--ink)">'+esc(i.de)+'</b> ('+esc(i.nom.replace(/^[^(]*\(|\)$/g,""))+'), qui gère la fourrière et l\'errance.</p>'+
+      i.tels.map(function(t){ return '<div class="tel"><span>'+(t.indexOf("0800")===0?"Numéro gratuit":"Standard")+'</span><b>'+esc(t)+'</b></div>'; }).join("")+
+      '<p class="mail">✉️ <span style="user-select:all">'+esc(i.mail)+'</span> · <a href="'+esc(i.site)+'" target="_blank" rel="noopener">'+esc(i.site.replace("https://",""))+' ↗</a></p>';
+  }
+  function majAnnonce(){
+    var esp = $("#a-espece").value, nom = $("#a-nom").value.trim(), desc = $("#a-desc").value.trim(), lieu = $("#a-lieu").value.trim(), tel = $("#a-tel").value.trim(), d = $("#a-date").value;
+    var quand = d ? new Date(d+"T12:00:00").toLocaleDateString("fr-FR",{weekday:"long",day:"numeric",month:"long",year:"numeric"}) : "…";
+    var com = $("#commune").value || "…";
+    var titre = situation === "trouve" ? "🐾 "+esp.toUpperCase()+" TROUVÉ · "+com : "🆘 "+esp.toUpperCase()+" PERDU · "+com;
+    var lignes = [titre, ""];
+    if (situation === "trouve") {
+      lignes.push(esp+" trouvé le "+quand+(lieu?", "+lieu:"")+".");
+      if (desc) lignes.push(desc.charAt(0).toUpperCase()+desc.slice(1)+".");
+      lignes.push("Je le garde au chaud le temps de retrouver sa famille. Pour le récupérer, décris-le-moi.");
+    } else {
+      lignes.push((nom?nom+", ":"")+esp.toLowerCase()+" perdu le "+quand+(lieu?", "+lieu:"")+".");
+      if (desc) lignes.push(desc.charAt(0).toUpperCase()+desc.slice(1)+".");
+      lignes.push("S'il te plaît, ne lui cours pas après : appelle-moi, même pour un doute.");
+    }
+    if (tel) lignes.push("📞 "+tel);
+    lignes.push("", "Merci de partager 🙏");
+    $("#annonce").textContent = lignes.join("\n");
+  }
+  ["#a-espece","#a-nom","#a-desc","#a-lieu","#a-date","#a-tel","#commune"].forEach(function(s){ $(s).addEventListener("input", majAnnonce); $(s).addEventListener("change", majAnnonce); });
+  $("#copier").addEventListener("click", function(){ copier($("#annonce").textContent); });
+
+  /* ---------- Assos ---------- */
+  function rendreAssos(){
+    $("#assos").innerHTML = (KP.assos||[]).map(function(a){
+      return '<article class="asso"><div class="meta"><span class="pill t">'+esc(a.type)+'</span><span class="pill">'+esc(a.zone)+'</span></div><h3>'+esc(a.nom)+'</h3><p>'+esc(a.fait)+'</p>'+
+        (a.lien ? '<a class="lien" href="'+esc(a.lien)+'" target="_blank" rel="noopener">Les soutenir ou les contacter ↗</a>' : '<span class="small muted">Lien à venir</span>')+'</article>';
+    }).join("");
+    $("#refuges").textContent = KP.refugesPublics || "";
+  }
+
+  /* ---------- Carnet (reste dans le navigateur) ---------- */
+  function lire(k){ try { return localStorage.getItem(k); } catch(e){ return null; } }
+  function memo(k, v){ try { localStorage.setItem(k, v); } catch(e){} }
+  function animaux(){ try { return JSON.parse(lire("kp_carnet") || "[]") || []; } catch(e){ return []; } }
+  function sauver(l){ memo("kp_carnet", JSON.stringify(l)); }
+  function ajouterMois(iso, m){ var d = new Date(iso+"T12:00:00"); var j = d.getDate(); d.setMonth(d.getMonth()+Number(m)); if (d.getDate() < j) d.setDate(0); return d; }
+  function joursAvant(d){ var a = new Date(); a.setHours(12,0,0,0); return Math.round((d - a)/86400000); }
+  function fmt(d){ return d.toLocaleDateString("fr-FR",{weekday:"short",day:"numeric",month:"short",year:"numeric"}); }
+  function rappel(lib, iso, mois){
+    if (!iso) return '<div class="rap"><div class="l"><b>'+lib+'</b><span>Pas encore noté</span></div><span class="etat vide">à noter</span></div>';
+    var p = ajouterMois(iso, mois||12), j = joursAvant(p), cls, txt;
+    if (j < 0) { cls = "retard"; txt = "en retard"; } else if (j <= 14) { cls = "bientot"; txt = j === 0 ? "aujourd'hui" : "dans "+j+" j"; } else { cls = "ok"; txt = "à jour"; }
+    return '<div class="rap"><div class="l"><b>'+lib+'</b><span>Prochain : '+fmt(p)+'</span></div><span class="etat '+cls+'">'+txt+'</span></div>';
+  }
+  var edition = null;
+  function rendreCarnet(){
+    var l = animaux(), box = $("#animaux");
+    if (!l.length) { box.innerHTML = '<div class="empty"><p style="font-size:1.6rem">📒</p><p>Ton carnet est vide.</p><p class="small">Ajoute ton animal avec le formulaire : ses rappels s\'afficheront ici.</p></div>'; return; }
+    box.innerHTML = l.map(function(a, i){
+      return '<article class="animal"><div class="animal-h"><h3>'+(a.espece==="Chat"?"🐈 ":"🐕 ")+esc(a.nom)+'</h3><div class="actions"><button class="btn btn-ghost btn-s" type="button" data-ed="'+i+'">Modifier</button><button class="btn btn-ghost btn-s" type="button" data-del="'+i+'">Retirer</button></div></div>'+
+        (a.puce ? '<p class="small muted">Puce : <span style="user-select:all;font-variant-numeric:tabular-nums">'+esc(a.puce)+'</span></p>' : '')+
+        '<div class="rappels">'+rappel("Vaccin", a.vaccin, a.vaccinM)+rappel("Anti-tiques et puces", a.tiques, a.tiquesM)+rappel("Vermifuge", a.verm, a.vermM)+'</div></article>';
+    }).join("");
+    $$("[data-del]", box).forEach(function(b){ b.addEventListener("click", function(){
+      var i = Number(b.getAttribute("data-del")), l2 = animaux();
+      if (b.getAttribute("data-sur") !== "1") { b.setAttribute("data-sur","1"); b.textContent = "Sûr ? Toucher encore"; return; }
+      l2.splice(i,1); sauver(l2); rendreCarnet(); toast("Retiré du carnet");
+    }); });
+    $$("[data-ed]", box).forEach(function(b){ b.addEventListener("click", function(){ editer(Number(b.getAttribute("data-ed"))); }); });
+  }
+  var CH = [["c-nom","nom"],["c-espece","espece"],["c-puce","puce"],["c-vaccin","vaccin"],["c-vaccin-m","vaccinM"],["c-tiques","tiques"],["c-tiques-m","tiquesM"],["c-verm","verm"],["c-verm-m","vermM"]];
+  var DEF = {espece:"Chien", vaccinM:"12", tiquesM:"1", vermM:"3"};
+  function remplir(a){ CH.forEach(function(c){ document.getElementById(c[0]).value = a[c[1]] != null ? a[c[1]] : (DEF[c[1]] || ""); }); }
+  function editer(i){ edition = i; remplir(animaux()[i]); $("#f-titre").textContent = "Modifier "+animaux()[i].nom; $("#c-cancel").hidden = false; $("#f-animal").scrollIntoView({block:"start"}); $("#c-nom").focus(); }
+  function finEdition(){ edition = null; remplir({}); $("#f-titre").textContent = "Ajouter un animal"; $("#c-cancel").hidden = true; }
+  $("#c-cancel").addEventListener("click", finEdition);
+  $("#f-animal").addEventListener("submit", function(e){
+    e.preventDefault();
+    var a = {}; CH.forEach(function(c){ a[c[1]] = document.getElementById(c[0]).value.trim(); });
+    if (!a.nom) return;
+    var l = animaux(); if (edition === null) l.push(a); else l[edition] = a;
+    sauver(l);
+    if (lire("kp_carnet") === null) toast("Ton navigateur bloque l'enregistrement");
+    else toast(edition === null ? a.nom+" ajouté ✓" : "Enregistré ✓");
+    finEdition(); rendreCarnet();
+  });
+
+  /* ---------- Démarrage ---------- */
+  $("#maj").textContent = KP.maj || "";
+  $("#antipoison").innerHTML = (KP.antipoison||[]).map(function(a){ return '<div class="tel"><span>'+esc(a.nom)+'</span><b>'+esc(a.tel)+'</b></div>'; }).join("");
+  rendreFiches("tout"); rendreCommunes(); rendreEtapes(); rendreAssos(); rendreCarnet(); montrer();
+})();
+</script>
+</body>
+</html>
