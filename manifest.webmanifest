@@ -1,0 +1,16 @@
+{
+  "name": "Kat'Pat' — le carnet péi",
+  "short_name": "Kat'Pat'",
+  "description": "Santé adaptée à La Réunion, perdu, trouvé, à adopter, les assos de l'île et les rappels de ton animal.",
+  "lang": "fr",
+  "start_url": "./app.html",
+  "scope": "./",
+  "display": "standalone",
+  "background_color": "#13110f",
+  "theme_color": "#13110f",
+  "icons": [
+    { "src": "assets/icon-192.png", "sizes": "192x192", "type": "image/png" },
+    { "src": "assets/icon-512.png", "sizes": "512x512", "type": "image/png" },
+    { "src": "assets/icon-maskable-512.png", "sizes": "512x512", "type": "image/png", "purpose": "maskable" }
+  ]
+}

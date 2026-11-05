@@ -6,6 +6,20 @@
 <!-- Au chaud : invisible des moteurs de recherche tant qu'on ne lance pas publiquement -->
 <meta name="robots" content="noindex, nofollow" />
 <meta name="theme-color" content="#13110f" />
+<link rel="manifest" href="manifest.webmanifest" />
+<link rel="apple-touch-icon" href="assets/apple-touch-icon.png" />
+<meta name="apple-mobile-web-app-title" content="Kat'Pat'" />
+<!-- Aperçu quand on partage le lien (WhatsApp, Facebook, Messenger) -->
+<meta property="og:type" content="website" />
+<meta property="og:locale" content="fr_FR" />
+<meta property="og:site_name" content="Kat'Pat' · un Monde Pixie" />
+<meta property="og:title" content="Kat'Pat' — le carnet péi du chien et du chat" />
+<meta property="og:description" content="Santé pour notre climat, animal perdu ou trouvé avec le bon numéro par commune, les assos de l'île. Gratuit, sans compte." />
+<meta property="og:url" content="https://pixiartpro.github.io/katpat/app.html" />
+<meta property="og:image" content="https://pixiartpro.github.io/katpat/assets/partage.jpg" />
+<meta property="og:image:width" content="1200" />
+<meta property="og:image:height" content="630" />
+<meta name="twitter:card" content="summary_large_image" />
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22%3E%3Ctext y=%22.9em%22 font-size=%2290%22%3E🐾%3C/text%3E%3C/svg%3E" />
 <title>Kat'Pat' — le carnet péi du chien et du chat</title>
 <meta name="description" content="Santé adaptée à La Réunion, perdu, trouvé, à adopter, et les assos de l'île. On t'oriente ; c'est ton vétérinaire qui décide." />
@@ -222,6 +236,10 @@
       <a class="door" href="#carnet"><span class="i">📒</span><div><h3>Mon carnet</h3><p>Vaccins, anti-tiques, vermifuge : les rappels de ton animal.</p></div></a>
     </div>
     <div class="veto"><span>🩺</span><p><b>On t'oriente, ton vétérinaire décide.</b> Kat'Pat' ne pose jamais de diagnostic. En cas de doute, appelle ton vétérinaire.</p></div>
+    <div class="actions" style="margin-top:18px">
+      <button class="btn btn-ghost" type="button" id="partager-app" hidden>📤 Envoyer Kat'Pat' à un ami</button>
+      <span class="small muted" id="installer">📲 Astuce : ajoute Kat'Pat' à l'écran d'accueil de ton téléphone (menu Partager, puis « Sur l'écran d'accueil »). Il s'ouvre ensuite même sans réseau.</span>
+    </div>
   </section>
 
   <!-- SANTÉ -->
@@ -278,7 +296,7 @@
           </div>
           <div class="field"><label for="a-tel">Ton numéro (pour qu'on te rappelle)</label><input id="a-tel" type="tel" autocomplete="off" placeholder="Ex. 0692 00 00 00" /></div>
           <div class="annonce" id="annonce" aria-live="polite"></div>
-          <div class="actions" style="margin-top:10px"><button class="btn btn-amber" type="button" id="copier">Copier l'annonce</button></div>
+          <div class="actions" style="margin-top:10px"><button class="btn btn-amber" type="button" id="partager" hidden>Partager l'annonce</button><button class="btn btn-amber" type="button" id="copier">Copier l'annonce</button></div>
           <p class="note-p">Astuce : ajoute une photo nette dans ton post, et donne le numéro de puce seulement à la fourrière ou au vétérinaire.</p>
         </div>
       </div>
@@ -551,6 +569,24 @@
     else toast(edition === null ? a.nom+" ajouté ✓" : "Enregistré ✓");
     finEdition(); rendreCarnet();
   });
+
+
+  /* ---------- Partager (menu du téléphone) ---------- */
+  if (navigator.share) {
+    $("#partager").hidden = false; $("#copier").classList.replace("btn-amber","btn-ghost");
+    $("#partager-app").hidden = false;
+  }
+  $("#partager").addEventListener("click", function(){
+    navigator.share({ text: $("#annonce").textContent }).catch(function(){});
+  });
+  $("#partager-app").addEventListener("click", function(){
+    navigator.share({ title: "Kat'Pat'", text: "Le carnet péi du chien et du chat : santé, animal perdu ou trouvé, assos de l'île.", url: "https://pixiartpro.github.io/katpat/app.html" }).catch(function(){});
+  });
+
+  /* ---------- Copie hors réseau ---------- */
+  if ("serviceWorker" in navigator && location.protocol !== "file:") {
+    window.addEventListener("load", function(){ navigator.serviceWorker.register("sw.js").catch(function(){}); });
+  }
 
   /* ---------- Démarrage ---------- */
   $("#maj").textContent = KP.maj || "";
