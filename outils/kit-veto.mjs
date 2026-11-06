@@ -68,7 +68,7 @@ ul{margin:0;padding-left:5mm}li{margin:.6mm 0}
 <p>Centres antipoison cités dans l'appli : ${KP.antipoison.map(x => `${esc(x.nom)} <span class="tel">${esc(x.tel)}</span>`).join(" · ")}.</p></div>
 <p class="nouv">Cette version du ${KP.maj} remplace celle du 05/11/2026. Les fiches ont été revues à partir de sources publiques : Royal Veterinary College, ARS La Réunion, une étude sur les maladies transmises au chien à La Réunion, CNITV. Elles restent à valider par vous.</p>
 <p>Si vous le souhaitez, votre nom ou celui de votre clinique peut apparaître dans l'appli comme relecteur.</p>
-<p class="pied">Appli en ligne : pixiartpro.github.io/katpat/app.html · Contact : PIX-I-ART, pix.i.art.pro@gmail.com · Version du ${KP.maj}</p>
+<p class="pied">Appli en ligne : pixiartpro.github.io/katpat/app.html · Contact : PIX-I-ART, contact@pix-i-art.re · Version du ${KP.maj}</p>
 ${KP.fiches.map(fiche).join("")}
 <section class="q"><p class="num">Dernière page</p><h2>Questions précises</h2><p class="pour">Une réponse courte suffit.</p>
 <table>${QUESTIONS.map(([t, q]) => `<tr><td>${t}</td><td>${esc(q)}<div class="rep"></div></td></tr>`).join("")}</table></section>
