@@ -168,6 +168,7 @@
   .contact .mail{font-size:.92rem;color:var(--muted);word-break:break-all}
   .annonce{white-space:pre-wrap;background:var(--bg2);border:1px dashed rgba(232,161,58,.45);border-radius:12px;padding:14px;font-size:.95rem;min-height:120px}
   .note-p{font-size:.86rem;color:var(--muted);margin-top:8px}
+  .garde{border-left:3px solid var(--amber);padding-left:10px;color:var(--ink)}
   .toast{position:fixed;left:50%;bottom:calc(96px + env(safe-area-inset-bottom,0px));transform:translateX(-50%);background:var(--ink);color:var(--bg);padding:10px 16px;border-radius:999px;font-weight:600;font-size:.9rem;z-index:60;opacity:0;pointer-events:none;transition:opacity .2s var(--ease)}
   .toast.on{opacity:1}
 
@@ -299,6 +300,7 @@
           <div class="annonce" id="annonce" aria-live="polite"></div>
           <div class="actions" style="margin-top:10px"><button class="btn btn-amber" type="button" id="partager" hidden>Partager l'annonce</button><button class="btn btn-amber" type="button" id="copier">Copier l'annonce</button></div>
           <p class="note-p">Astuce : ajoute une photo nette dans ton post, et donne le numéro de puce seulement à la fourrière ou au vétérinaire.</p>
+          <p class="note-p garde">⚠️ <b>Attention aux arnaques.</b> Ne paie jamais pour récupérer ton animal. I-CAD ne demande jamais de payer par SMS ou par mail, même si le message cite le nom de ton animal ou son numéro de puce : en cas de doute, tape toi-même i-cad.fr. Une arnaque, ça se signale à la gendarmerie ou à la police.</p>
         </div>
       </div>
     </div>
@@ -442,7 +444,7 @@
   /* ---------- Perdu / trouvé / adopter ---------- */
   var ETAPES = {
     perdu: { titre: "Tu as perdu ton animal", items: [
-      ["Cherche tout de suite autour de chez toi", "Appelle-le, demande aux voisins, regarde sous les voitures et dans les ravines proches. Un animal qui a peur se cache souvent tout près."],
+      ["Cherche tout de suite autour de chez toi", "Appelle-le, demande aux voisins, regarde sous les voitures et dans les ravines proches. Un animal qui a peur se cache souvent tout près. Un chat sort plutôt à la tombée de la nuit : cherche-le aussi à ce moment-là."],
       ["Déclare la perte sur I-CAD", "Si ton animal est pucé, déclare-le perdu dans ton espace sur i-cad.fr. Vétérinaires, fourrières et assos sont prévenus quand ils lisent sa puce."],
       ["Appelle la fourrière de ta commune", "Choisis ta commune à côté pour avoir le numéro. Sans nouvelles, rappelle tous les 2 jours : au bout de 8 jours ouvrés en fourrière, un animal non réclamé est considéré comme abandonné."],
       ["Publie une annonce", "Prépare-la à côté, puis colle-la dans les groupes Facebook de ta commune avec une photo nette."],
@@ -490,7 +492,7 @@
     if (!c) { box.innerHTML = ""; return; }
     var i = KP.intercos[KP.communes[c]];
     box.innerHTML = '<p class="small muted">'+esc(c)+' dépend <b style="color:var(--ink)">'+esc(i.de)+'</b> ('+esc(i.nom.replace(/^[^(]*\(|\)$/g,""))+'), qui gère la fourrière et l\'errance.</p>'+
-      i.tels.map(function(t){ return '<div class="tel"><span>'+(t.indexOf("0800")===0?"Numéro gratuit":"Standard")+'</span><b>'+esc(t)+'</b></div>'; }).join("")+
+      i.tels.map(function(t, k){ return '<div class="tel"><span>'+esc((i.libs && i.libs[k]) || (t.indexOf("0800")===0?"Numéro gratuit":"Standard"))+'</span><b>'+esc(t)+'</b></div>'; }).join("")+(i.note ? '<p class="small muted">'+esc(i.note)+'</p>' : "")+
       '<p class="mail">✉️ <span style="user-select:all">'+esc(i.mail)+'</span> · <a href="'+esc(i.site)+'" target="_blank" rel="noopener">'+esc(i.site.replace("https://",""))+' ↗</a></p>';
   }
   function majAnnonce(){

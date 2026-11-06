@@ -19,10 +19,10 @@ window.KP = {
      CINOR : aucun numéro sur cinor.re, ceux-ci viennent de stoperrance.re (appel test à faire). */
   intercos: {
     CINOR:  { de: "de la CINOR", nom: "CINOR (Nord)",  tels: ["0800 315 316", "0262 28 98 84"], mail: "environnement@cinor.org", site: "https://www.cinor.re" },
-    CIREST: { de: "de la CIREST", nom: "CIREST (Est)",  tels: ["0262 46 06 49"], mail: "fourriere@cirest.fr", site: "https://www.cirest.fr" },
-    TCO:    { de: "du TCO", nom: "TCO (Ouest)",   tels: ["0800 605 605", "0262 32 12 12"], mail: "sterilisation@tco.re", site: "https://www.tco.re" },
-    CIVIS:  { de: "de la CIVIS", nom: "CIVIS (Sud-Ouest)", tels: ["0800 501 501", "0262 35 25 58"], mail: "accueil@civis.re", site: "https://www.civis.re" },
-    CASUD:  { de: "de la CASUD", nom: "CASUD (Sud)",   tels: ["0800 001 601", "0262 57 97 77"], mail: "campagne-sterilisation@casud.re", site: "https://www.casud.re" }
+    CIREST: { de: "de la CIREST", nom: "CIREST (Est)",  tels: ["0262 46 06 49"], libs: ["Fourrière"], mail: "fourriere@cirest.fr", site: "https://www.cirest.fr" },
+    TCO:    { de: "du TCO", nom: "TCO (Ouest)",   tels: ["0800 605 605", "0262 32 12 12"], libs: ["Numéro gratuit (depuis un fixe)", "Standard"], mail: "sterilisation@tco.re", site: "https://www.tco.re" },
+    CIVIS:  { de: "de la CIVIS", nom: "CIVIS (Sud-Ouest)", tels: ["0800 501 501", "0262 35 25 58", "0262 25 98 17"], libs: ["Numéro gratuit (captures)", "Fourrière Espoir", "Refuge Chance"], mail: "accueil@civis.re", site: "https://www.civis.re" },
+    CASUD:  { de: "de la CASUD", nom: "CASUD (Sud)",   tels: ["0800 001 601", "0262 57 97 77"], libs: ["Fourrière (numéro gratuit)", "Standard"], note: "Fourrière ouverte du lundi au vendredi, 7 h 30-12 h et 13 h 30-16 h. En dehors : la police municipale de ta commune.", mail: "campagne-sterilisation@casud.re", site: "https://www.casud.re" }
   },
 
   /* Les 24 communes et leur intercommunalité */
@@ -181,10 +181,10 @@ window.KP = {
     }
   ],
 
-  /* Associations : coordonnées publiques, à vérifier avec chaque asso avant la sortie */
+  /* Associations : coordonnées publiques, à vérifier avec chaque asso avant la sortie.
+     APPAR (La Possession) retirée le 06/11/2026 : aucun lien officiel ni signe d'activité trouvé. */
   assos: [
     { nom: "SPA de La Réunion", zone: "Nord (Sainte-Marie)", type: "Refuge", fait: "Refuge du Grand Prado à Sainte-Marie et dispensaire de stérilisation. Adoptions sur l'île et vers la métropole.", lien: "https://www.helloasso.com/associations/spa-refuge-de-la-reunion-sainte-marie" },
-    { nom: "APPAR", zone: "Ouest (La Possession)", type: "Protection", fait: "Agir Pour Protéger les Animaux Réunionnais : lutte contre la souffrance animale sur l'île.", lien: "" },
     { nom: "Sauvade", zone: "Toute l'île", type: "Sauvetage", fait: "Soigne des chiens errants ou abandonnés, avec un réseau de familles d'accueil, puis les fait adopter, surtout en métropole.", lien: "https://asso-sauvade.fr/" },
     { nom: "A L'Ouest L'Eden", zone: "Ouest", type: "Sauvetage", fait: "Recueille des chiens menacés d'euthanasie en refuge et des chiens abandonnés, puis les place à l'adoption.", lien: "https://www.teaming.net/associationalouestleden" },
     { nom: "A'V Refuge", zone: "Ouest (Saint-Gilles)", type: "Refuge", fait: "Protège les animaux et mène des campagnes de stérilisation. Cherche des bénévoles.", lien: "https://sites.google.com/view/av-refuge" },

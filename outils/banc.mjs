@@ -22,7 +22,7 @@ const ok = (nom, cond, detail = "") => { res.push({ nom, ok: !!cond, detail }); 
   const orph = com.filter(c => !KP.intercos[KP.communes[c]]);
   ok("chaque commune a son interco", !orph.length, orph.join(","));
   for (const [k, i] of Object.entries(KP.intercos)) {
-    ok(`interco ${k} complète`, i.de && i.nom && i.tels?.length && /@/.test(i.mail) && /^https:\/\//.test(i.site), JSON.stringify(i));
+    ok(`interco ${k} complète`, i.de && i.nom && i.tels?.length && (!i.libs || i.libs.length === i.tels.length) && /@/.test(i.mail) && /^https:\/\//.test(i.site), JSON.stringify(i));
     ok(`interco ${k} numéros au bon format`, i.tels.every(t => /^(0800 \d{3} \d{3}|0262 \d{2} \d{2} \d{2})$/.test(t)), i.tels.join(" | "));
     ok(`interco ${k} a au moins une commune`, com.some(c => KP.communes[c] === k));
   }
@@ -36,7 +36,7 @@ const ok = (nom, cond, detail = "") => { res.push({ nom, ok: !!cond, detail }); 
     ok(`fiche ${f.id} renvoie vers le véto`, f.id==='cyclone' || /v[ée]t[ée]rinaire|v[ée]to/.test(txt), "");
     ok(`fiche ${f.id} a des sources`, (f.sources || []).length > 0, "sources vides");
   }
-  ok("8 assos", KP.assos.length === 8, KP.assos.length);
+  ok("7 assos (APPAR retirée)", KP.assos.length === 7, KP.assos.length);
   for (const a of KP.assos) ok(`asso ${a.nom} a un lien`, !!a.lien, a.lien || "aucun");
   globalThis.__KP = KP;
 }
