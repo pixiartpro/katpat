@@ -130,7 +130,7 @@
   .blk.faire{background:var(--card2);border-radius:var(--radius-s);padding:14px 16px}
   .blk.faire h4{color:var(--amber-soft)}
   .blk.eviter h4{color:var(--danger)}
-  .src{font-size:.82rem;color:var(--muted)}
+  .src{font-size:.86rem;color:var(--muted)}
   .src a{color:var(--muted)}
   .tel-list{display:grid;gap:8px}
   .tel{display:flex;flex-wrap:wrap;justify-content:space-between;align-items:center;gap:8px;background:var(--bg2);border:1px solid var(--line);border-radius:12px;padding:10px 14px}
@@ -158,7 +158,7 @@
   ol.steps li::before{content:counter(s);width:30px;height:30px;border-radius:50%;background:var(--card2);border:1px solid rgba(232,161,58,.4);color:var(--amber-soft);display:grid;place-items:center;font-weight:600;font-size:.88rem}
   ol.steps b{display:block}
   ol.steps span{color:var(--muted);font-size:.94rem}
-  label{display:block;font-size:.84rem;color:var(--muted);margin-bottom:5px}
+  label{display:block;font-size:.86rem;color:var(--muted);margin-bottom:5px}
   input,select,textarea{width:100%;background:var(--bg2);border:1px solid var(--line);border-radius:12px;padding:11px 13px;font-size:16px;transition:border-color .2s var(--ease)}
   input:focus,select:focus,textarea:focus{border-color:var(--amber);outline:none}
   .field{margin-bottom:12px}
@@ -167,7 +167,7 @@
   .contact{margin-top:12px;display:grid;gap:8px}
   .contact .mail{font-size:.92rem;color:var(--muted);word-break:break-all}
   .annonce{white-space:pre-wrap;background:var(--bg2);border:1px dashed rgba(232,161,58,.45);border-radius:12px;padding:14px;font-size:.95rem;min-height:120px}
-  .note-p{font-size:.84rem;color:var(--muted);margin-top:8px}
+  .note-p{font-size:.86rem;color:var(--muted);margin-top:8px}
   .toast{position:fixed;left:50%;bottom:calc(96px + env(safe-area-inset-bottom,0px));transform:translateX(-50%);background:var(--ink);color:var(--bg);padding:10px 16px;border-radius:999px;font-weight:600;font-size:.9rem;z-index:60;opacity:0;pointer-events:none;transition:opacity .2s var(--ease)}
   .toast.on{opacity:1}
 
@@ -192,7 +192,7 @@
   .rappels{display:grid;gap:8px}
   .rap{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:10px;align-items:center;background:var(--bg2);border:1px solid var(--line);border-radius:12px;padding:10px 12px}
   .rap .l b{display:block;font-weight:600;font-size:.95rem}
-  .rap .l span{font-size:.84rem;color:var(--muted);font-variant-numeric:tabular-nums}
+  .rap .l span{font-size:.86rem;color:var(--muted);font-variant-numeric:tabular-nums}
   .etat{font-size:.74rem;font-weight:600;border-radius:999px;padding:3px 9px;white-space:nowrap}
   .etat.ok{background:rgba(31,182,166,.15);color:var(--teal)}
   .etat.bientot{background:rgba(232,161,58,.16);color:var(--amber-soft)}
@@ -545,7 +545,7 @@
     box.innerHTML = l.map(function(a, i){
       return '<article class="animal"><div class="animal-h"><h3>'+(a.espece==="Chat"?"🐈 ":"🐕 ")+esc(a.nom)+'</h3><div class="actions"><button class="btn btn-ghost btn-s" type="button" data-ed="'+i+'">Modifier</button><button class="btn btn-ghost btn-s" type="button" data-del="'+i+'">Retirer</button></div></div>'+
         (a.puce ? '<p class="small muted">Puce : <span style="user-select:all;font-variant-numeric:tabular-nums">'+esc(a.puce)+'</span></p>' : '')+
-        '<div class="rappels">'+rappel("Vaccin", a.vaccin, a.vaccinM)+rappel("Anti-tiques et puces", a.tiques, a.tiquesM)+rappel("Vermifuge", a.verm, a.vermM)+'</div></article>';
+        '<div class="rappels">'+rappel("Vaccin", a.vaccin, a.vaccinM||DEF.vaccinM)+rappel("Anti-tiques et puces", a.tiques, a.tiquesM||DEF.tiquesM)+rappel("Vermifuge", a.verm, a.vermM||DEF.vermM)+'</div></article>';
     }).join("");
     $$("[data-del]", box).forEach(function(b){ b.addEventListener("click", function(){
       var i = Number(b.getAttribute("data-del")), l2 = animaux();
@@ -562,7 +562,7 @@
   $("#c-cancel").addEventListener("click", finEdition);
   $("#f-animal").addEventListener("submit", function(e){
     e.preventDefault();
-    var a = {}; CH.forEach(function(c){ a[c[1]] = document.getElementById(c[0]).value.trim(); });
+    var a = {}; CH.forEach(function(c){ a[c[1]] = document.getElementById(c[0]).value.trim(); if (!a[c[1]] && /M$/.test(c[1])) a[c[1]] = DEF[c[1]]; });
     if (!a.nom) return;
     var l = animaux(); if (edition === null) l.push(a); else l[edition] = a;
     sauver(l);
