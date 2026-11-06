@@ -23,7 +23,7 @@ const ok = (nom, cond, detail = "") => { res.push({ nom, ok: !!cond, detail }); 
   ok("chaque commune a son interco", !orph.length, orph.join(","));
   for (const [k, i] of Object.entries(KP.intercos)) {
     ok(`interco ${k} complète`, i.de && i.nom && i.tels?.length && /@/.test(i.mail) && /^https:\/\//.test(i.site), JSON.stringify(i));
-    ok(`interco ${k} numéros au bon format`, i.tels.every(t => /^0(800|262) \d{3} \d{3}$/.test(t)), i.tels.join(" | "));
+    ok(`interco ${k} numéros au bon format`, i.tels.every(t => /^(0800 \d{3} \d{3}|0262 \d{2} \d{2} \d{2})$/.test(t)), i.tels.join(" | "));
     ok(`interco ${k} a au moins une commune`, com.some(c => KP.communes[c] === k));
   }
   const ids = KP.fiches.map(f => f.id);
