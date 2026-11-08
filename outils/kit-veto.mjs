@@ -64,17 +64,18 @@ ul{margin:0;padding-left:5mm}li{margin:.6mm 0}
 <h1>Fiches santé <span>à relire</span></h1>
 <p>Kat'Pat' est une petite appli gratuite pour les propriétaires de chiens et de chats de La Réunion. Elle donne les bons réflexes pour notre climat, aide à retrouver un animal perdu et met en avant les associations de l'île.</p>
 <p>Avant de la faire connaître, nous voulons qu'un vétérinaire relise ses ${KP.fiches.length} fiches santé. Pour chaque fiche, il suffit de cocher une case et, si besoin, d'écrire une remarque. La dernière page pose ${QUESTIONS.length} questions précises.</p>
-<div class="box"><p><b>Notre règle :</b> Kat'Pat' oriente, elle ne diagnostique jamais. Aucune dose, aucun nom de médicament. Chaque fiche renvoie vers le vétérinaire.</p>
+<div class="box"><p><b>Notre règle :</b> Kat'Pat' oriente, elle ne diagnostique jamais. Aucune dose, aucun traitement conseillé : les seuls médicaments cités sont ceux qu'il ne faut pas donner. Chaque fiche renvoie vers le vétérinaire. Merci de regarder surtout les gestes déconseillés et les cas où il faut appeler tout de suite.</p>
 <p>Centres antipoison cités dans l'appli : ${KP.antipoison.map(x => `${esc(x.nom)} <span class="tel">${esc(x.tel)}</span>`).join(" · ")}.</p></div>
 <p class="nouv">Cette version du ${KP.maj} remplace celle du 05/11/2026. Les fiches ont été revues à partir de sources publiques : Royal Veterinary College, ARS La Réunion, une étude sur les maladies transmises au chien à La Réunion, CNITV. Elles restent à valider par vous.</p>
-<p>Si vous le souhaitez, votre nom ou celui de votre clinique peut apparaître dans l'appli comme relecteur.</p>
+<p>Par défaut, votre relecture reste anonyme. Si vous le souhaitez, et seulement avec votre accord sur la phrase exacte, l'appli peut indiquer « Fiches relues le [date] par [nom] ». Si une fiche change ensuite, cette mention est retirée jusqu'à une nouvelle relecture. Une relecture partielle nous aide déjà.</p>
 <p class="pied">Appli en ligne : pixiartpro.github.io/katpat/app.html · Contact : PIX-I-ART, contact@pix-i-art.re · Version du ${KP.maj}</p>
 ${KP.fiches.map(fiche).join("")}
 <section class="q"><p class="num">Dernière page</p><h2>Questions précises</h2><p class="pour">Une réponse courte suffit.</p>
 <table>${QUESTIONS.map(([t, q]) => `<tr><td>${t}</td><td>${esc(q)}<div class="rep"></div></td></tr>`).join("")}</table></section>
 </body></html>`;
 
-const h = join(OUT, `KatPat-fiches-sante-a-relire-${iso}.html`);
+// 3e argument facultatif : date du PDF (AAAA-MM-JJ), quand le texte d'accompagnement change sans que les fiches changent.
+const h = join(OUT, `KatPat-fiches-sante-a-relire-${process.argv[3] || iso}.html`);
 const pdf = h.replace(/\.html$/, ".pdf");
 writeFileSync(h, html);
 execFileSync("/Applications/Google Chrome.app/Contents/MacOS/Google Chrome",
