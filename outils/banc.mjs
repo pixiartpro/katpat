@@ -79,14 +79,16 @@ let ver; for (let i = 0; i < 50; i++) { try { ver = await (await fetch(`http://1
 const tab = await (await fetch(`http://127.0.0.1:${port}/json/new?about:blank`, { method: "PUT" })).json();
 const ws = new WebSocket(tab.webSocketDebuggerUrl);
 await new Promise(r => ws.addEventListener("open", r, { once: true }));
-let nid = 0; const wait = new Map(); const erreurs = []; const reseau = [];
+let nid = 0; const wait = new Map(); const erreurs = []; const urlsDemandees = new Map();
+const reseau = [];
 ws.addEventListener("message", e => {
   const m = JSON.parse(e.data);
   if (m.id && wait.has(m.id)) { wait.get(m.id)(m); wait.delete(m.id); }
   if (m.method === "Runtime.exceptionThrown") erreurs.push(m.params.exceptionDetails.exception?.description || m.params.exceptionDetails.text);
   if (m.method === "Runtime.consoleAPICalled" && m.params.type === "error") erreurs.push(m.params.args.map(a => a.value || a.description).join(" "));
   if (m.method === "Network.responseReceived") reseau.push({ url: m.params.response.url, status: m.params.response.status });
-  if (m.method === "Network.loadingFailed" && !m.params.canceled) reseau.push({ url: m.params.requestId, status: "ÉCHEC " + m.params.errorText });
+  if (m.method === "Network.requestWillBeSent") urlsDemandees.set(m.params.requestId, m.params.request.url);
+  if (m.method === "Network.loadingFailed" && !m.params.canceled) reseau.push({ url: urlsDemandees.get(m.params.requestId) || m.params.requestId, status: "ÉCHEC " + m.params.errorText });
 });
 const cdp = (method, params = {}) => new Promise(r => { const id = ++nid; wait.set(id, r); ws.send(JSON.stringify({ id, method, params })); });
 const ev = async (expr) => { const r = await cdp("Runtime.evaluate", { expression: expr, awaitPromise: true, returnByValue: true }); if (r.result?.exceptionDetails) throw new Error(r.result.exceptionDetails.exception?.description || "eval"); return r.result?.result?.value; };
@@ -189,6 +191,7 @@ ok("santé : réserve « pas encore confirmés » près des numéros antipoison"
 // Carnet
 await ev(`location.hash='#carnet'`); await sleep(200);
 ok("carnet vide : pas de carte « Garder une copie »", await ev(`document.querySelector('#copie-card').hidden`));
+ok("bouton caché = vraiment invisible (attribut hidden respecté)", await ev(`[...document.querySelectorAll('[hidden]')].every(e=>getComputedStyle(e).display==='none')`));
 ok("carnet vide au départ", await ev(`!!document.querySelector('#animaux .empty')`));
 const today = new Date(); const isoJ = d => d.toISOString().slice(0, 10);
 const ilya = n => { const d = new Date(); d.setDate(d.getDate() - n); return isoJ(d); };

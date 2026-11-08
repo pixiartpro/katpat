@@ -82,7 +82,7 @@
 
   /* Vues */
   .view{padding-block:28px 24px}
-  .view[hidden]{display:none!important}
+  .view[hidden],[hidden]{display:none!important}
   .kicker{color:var(--teal);font-weight:600;font-size:.76rem;letter-spacing:.2em;text-transform:uppercase;margin-bottom:8px}
   .view h1{font-size:clamp(2rem,6vw,2.8rem);margin-bottom:10px}
   .lead{color:#e7ddcf;font-size:1.06rem;max-width:62ch}
@@ -331,7 +331,7 @@
     <p class="lead">Les numéros et les sites officiels, rangés par thème. Choisis ta commune pour voir ta fourrière et ta stérilisation aidée.</p>
     <div class="card"><div class="field" style="margin:0"><label for="c-commune">Ta commune</label><select id="c-commune"><option value="">Choisir…</option></select></div></div>
     <div class="themes" id="themes"></div>
-    <p class="muted small" style="margin-top:14px">Contacts relevés le dimanche 08/11/2026, sur la page officielle de chaque organisme quand elle les donne. Les numéros des centres antipoison et ceux de la CINOR viennent d'autres sources et n'ont pas encore été confirmés par un appel : en cas de doute, vérifie sur le site de l'organisme. Un numéro a changé ? Écris-nous : <b style="user-select:all">contact@pix-i-art.re</b></p>
+    <p class="muted small" style="margin-top:14px">Contacts relevés entre le vendredi 06/11 et le dimanche 08/11/2026, sur la page officielle de chaque organisme quand elle les donne. Les numéros des centres antipoison et ceux de la CINOR viennent d'autres sources et n'ont pas encore été confirmés par un appel : en cas de doute, vérifie sur le site de l'organisme. Un numéro a changé ? Écris-nous : <b style="user-select:all">contact@pix-i-art.re</b></p>
   </section>
 
   <!-- ASSOS -->
@@ -384,7 +384,7 @@
         <div id="animaux" style="display:grid;gap:14px;min-width:0"></div>
         <div class="card" id="copie-card" hidden>
           <h3>📤 Garder une copie</h3>
-          <p class="muted small" style="margin-bottom:12px">Ton carnet n'existe que sur ce téléphone. Envoie-toi une copie en message, par mail ou dans tes notes : si tu changes de téléphone, tu pourras ressaisir les dates.</p>
+          <p class="muted small" style="margin-bottom:12px">Ton carnet n'existe que sur cet appareil. Envoie-toi une copie en message, par mail ou dans tes notes : si tu changes d'appareil, tu pourras ressaisir les dates.</p>
           <div class="actions"><button class="btn btn-amber" type="button" id="copie-env" hidden>Envoyer une copie</button><button class="btn btn-ghost" type="button" id="copie-cop">Copier le texte</button></div>
           <pre class="annonce" id="copie-txt" hidden></pre>
         </div>
@@ -472,7 +472,7 @@
     $("#fiches").innerHTML = html || '<p class="muted">Aucune fiche pour ce filtre.</p>';
     $("#statut-fiches p").innerHTML = KP.relectureVeto
       ? "<b>Fiches relues par un vétérinaire "+esc(KP.relectureVeto)+".</b> Elles ne remplacent pas ton vétérinaire : elles t'aident à reconnaître une urgence et à préparer ta question."
-      : "<b>Fiches en attente de relecture par un vétérinaire.</b> Elles s'appuient sur des sources officielles, citées en bas de chaque fiche, mais aucun vétérinaire ne les a encore validées. Elles ne remplacent pas ton vétérinaire : en cas de doute, appelle-le.";
+      : "<b>Fiches en attente de relecture par un vétérinaire.</b> Elles s'appuient sur des sources citées en bas de chaque fiche (organismes publics, école vétérinaire, travaux de recherche), mais aucun vétérinaire ne les a encore validées. Elles ne remplacent pas ton vétérinaire : en cas de doute, appelle-le.";
   }
   $$(".chip").forEach(function(b){
     b.addEventListener("click", function(){
@@ -673,6 +673,7 @@
   });
   if (navigator.share) { $("#copie-env").hidden = false; } else { $("#copie-cop").classList.replace("btn-ghost","btn-amber"); }
   $("#copie-env").addEventListener("click", function(){
+    if (!navigator.share) { $("#copie-cop").click(); return; }
     navigator.share({ title: "Mon carnet Kat'Pat'", text: texteCarnet() }).then(function(){ toast("Copie partie : vérifie qu'elle est bien arrivée"); }).catch(function(){});
   });
   $("#copie-cop").addEventListener("click", function(){

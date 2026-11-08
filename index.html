@@ -57,9 +57,9 @@
   .hero-bg::after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,rgba(19,17,15,0) 72%,rgba(19,17,15,.95) 100%),linear-gradient(90deg,rgba(19,17,15,.9) 0%,rgba(19,17,15,.7) 48%,rgba(19,17,15,.06) 76%)}
   .hero-in{position:relative;z-index:2;width:100%;padding:0 22px 64px}
   /* Téléphone : la photo seule, sans texte dessus (le chien net est à droite, en bas), puis le texte sur fond sombre */
-  @media (max-width:700px){
+  @media (max-width:900px){
     header.hero{min-height:0;display:block}
-    .hero-bg{position:relative;inset:auto;height:68vw;transform:none;background-size:175% auto;background-position:84% 100%}
+    .hero-bg{position:relative;inset:auto;height:min(68vw,460px);transform:none;background-size:175% auto;background-position:84% 100%}
     .hero-bg::after{background:linear-gradient(180deg,rgba(19,17,15,0) 86%,rgba(19,17,15,1) 100%)}
     .hero-in{padding-top:6px}
   }
