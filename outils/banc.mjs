@@ -185,6 +185,7 @@ await ev(`location.hash='#sante'`); await sleep(200);
 const stat = await ev(`({b:document.querySelector('#statut-fiches').textContent, t:document.querySelectorAll('#fiches details').length, n:[...document.querySelectorAll('#fiches details')].filter(d=>d.textContent.includes('pas encore relue par un vétérinaire')).length})`);
 ok("santé : bandeau « en attente de relecture » tant que relectureVeto est vide", KP.relectureVeto ? stat.b.includes("relues par un vétérinaire") : stat.b.includes("en attente de relecture"), stat.b.slice(0, 80));
 ok("santé : chaque fiche dit qu'elle n'est pas encore relue", KP.relectureVeto ? true : (stat.t > 0 && stat.n === stat.t), stat.n + '/' + stat.t);
+ok("santé : réserve « pas encore confirmés » près des numéros antipoison", !KP.antipoisonNote || (await ev(`document.querySelector('#antipoison').textContent.includes('pas encore confirmés')`)));
 // Carnet
 await ev(`location.hash='#carnet'`); await sleep(200);
 ok("carnet vide : pas de carte « Garder une copie »", await ev(`document.querySelector('#copie-card').hidden`));

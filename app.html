@@ -331,7 +331,7 @@
     <p class="lead">Les numéros et les sites officiels, rangés par thème. Choisis ta commune pour voir ta fourrière et ta stérilisation aidée.</p>
     <div class="card"><div class="field" style="margin:0"><label for="c-commune">Ta commune</label><select id="c-commune"><option value="">Choisir…</option></select></div></div>
     <div class="themes" id="themes"></div>
-    <p class="muted small" style="margin-top:14px">Contacts relevés sur leurs pages officielles le dimanche 08/11/2026. Les numéros des centres antipoison et ceux de la CINOR n'ont pas encore été confirmés par un appel : en cas de doute, vérifie sur le site de l'organisme. Un numéro a changé ? Écris-nous : <b style="user-select:all">contact@pix-i-art.re</b></p>
+    <p class="muted small" style="margin-top:14px">Contacts relevés le dimanche 08/11/2026, sur la page officielle de chaque organisme quand elle les donne. Les numéros des centres antipoison et ceux de la CINOR viennent d'autres sources et n'ont pas encore été confirmés par un appel : en cas de doute, vérifie sur le site de l'organisme. Un numéro a changé ? Écris-nous : <b style="user-select:all">contact@pix-i-art.re</b></p>
   </section>
 
   <!-- ASSOS -->
@@ -450,7 +450,7 @@
     return '<div class="blk '+(cls||"")+'"><h4>'+titre+'</h4><ul>'+items.map(function(i){ return "<li>"+esc(i)+"</li>"; }).join("")+"</ul></div>";
   }
   function telsAntipoison(){
-    return '<div class="tel-list">'+(KP.antipoison||[]).map(function(a){ return '<div class="tel"><span>'+esc(a.nom)+'</span><b>'+esc(a.tel)+'</b></div>'; }).join("")+"</div>";
+    return '<div class="tel-list">'+(KP.antipoison||[]).map(function(a){ return '<div class="tel"><span>'+esc(a.nom)+'</span><b>'+esc(a.tel)+'</b></div>'; }).join("")+"</div>"+(KP.antipoisonNote ? '<p class="small muted">⏳ '+esc(KP.antipoisonNote)+'</p>' : "");
   }
   function rendreFiches(filtre){
     var html = (KP.fiches||[]).filter(function(f){
@@ -575,7 +575,7 @@
     $("#themes").innerHTML = (KP.contacts||[]).map(function(t){
       var dyn = "";
       var apres = "";
-      if (t.dyn === "antipoison") apres = '<div class="ct"><b>Il a avalé un produit ou une plante ?</b><p>Appelle ton vétérinaire, ou un centre antipoison vétérinaire. Ils répondent environ de 11 h 30 à 3 h du matin chez nous (de 10 h 30 à 2 h d\'avril à octobre).</p><div class="lks">'+(KP.antipoison||[]).map(function(a){ return lienTel(a.tel, a.nom.replace(/ \(.*\)/,"")); }).join("")+'</div></div>';
+      if (t.dyn === "antipoison") apres = '<div class="ct"><b>Il a avalé un produit ou une plante ?</b><p>Appelle ton vétérinaire, ou un centre antipoison vétérinaire. Ils répondent environ de 11 h 30 à 3 h du matin chez nous (de 10 h 30 à 2 h d\'avril à octobre).</p><div class="lks">'+(KP.antipoison||[]).map(function(a){ return lienTel(a.tel, a.nom.replace(/ \(.*\)/,"")); }).join("")+'</div>'+(KP.antipoisonNote ? '<p class="small muted">⏳ '+esc(KP.antipoisonNote)+'</p>' : "")+'</div>';
       if (t.dyn === "interco") {
         if (c && KP.communes[c]) { var i = KP.intercos[KP.communes[c]];
           dyn = '<div class="dyn"><b>'+esc(c)+' : '+esc(i.nom)+'</b><div class="lks">'+i.tels.map(function(n, k){ return lienTel(n, (i.libs && i.libs[k]) || (n.indexOf("0800")===0?"Numéro gratuit":"Standard")); }).join("")+'</div>'+
@@ -690,7 +690,7 @@
 
   /* ---------- Démarrage ---------- */
   $("#maj").textContent = KP.maj || "";
-  $("#antipoison").innerHTML = (KP.antipoison||[]).map(function(a){ return '<div class="tel"><span>'+esc(a.nom)+'</span><b>'+esc(a.tel)+'</b></div>'; }).join("");
+  $("#antipoison").innerHTML = (KP.antipoison||[]).map(function(a){ return '<div class="tel"><span>'+esc(a.nom)+'</span><b>'+esc(a.tel)+'</b></div>'; }).join("")+(KP.antipoisonNote ? '<p class="small muted">⏳ '+esc(KP.antipoisonNote)+'</p>' : "");
   rendreFiches("tout"); rendreCommunes(); rendreThemes(); rendreEtapes(); rendreAssos(); rendreCarnet(); montrer();
 })();
 </script>

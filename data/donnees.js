@@ -13,6 +13,7 @@ window.KP = {
   /* Numéros d'urgence animale (centres antipoison vétérinaires, 7 j/7 de 8 h 30 à minuit heure de métropole ;
      à La Réunion : 11 h 30 - 3 h quand la métropole est à l'heure d'hiver, 10 h 30 - 2 h à l'heure d'été).
      Numéros revus le 06/11/2026 (sources concordantes, pas de page officielle lisible : appel test à faire). */
+  antipoisonNote: "Numéros relevés sur plusieurs sources concordantes, pas encore confirmés par un appel. En cas de doute, appelle d'abord ton vétérinaire.",
   antipoison: [
     { nom: "CNITV (Lyon)", tel: "04 78 87 10 40" },
     { nom: "CAPAE-Ouest (Nantes)", tel: "02 40 68 77 40" }
