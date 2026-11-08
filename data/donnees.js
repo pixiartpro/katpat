@@ -36,6 +36,52 @@ window.KP = {
     "Le Tampon": "CASUD", "L'Entre-Deux": "CASUD", "Saint-Joseph": "CASUD", "Saint-Philippe": "CASUD"
   },
 
+  /* Contacts utiles, par thème. Règle : un contact n'entre que si sa page officielle (ou celle de l'organisme)
+     a été ouverte et le donne. Recherche + 2 contradicteurs le 08/11/2026 (recherche/contacts-utiles-2026-11-08.json) ;
+     numéros DAAF et règles de morsure relus à la main le 08/11/2026.
+     dyn : "antipoison" = centres antipoison ; "interco" = contacts de l'intercommunalité de la commune choisie. */
+  contacts: [
+    { id: "urgence", emoji: "🚨", theme: "Un animal en danger, maintenant", dyn: "antipoison", items: [
+      { nom: "Police ou gendarmerie", pour: "Un animal est en danger en ce moment (enfermé au soleil, battu, abandonné attaché) : appelle le 17. Le 112 marche aussi, gratuit, jour et nuit.", tels: ["17", "112"] },
+      { nom: "Tu ne peux pas parler au téléphone", pour: "Contacte les secours par l'appli ou le site du 114.", site: "https://www.urgence114.fr/", siteNom: "urgence114.fr" },
+      { nom: "Ton vétérinaire", pour: "Il doit répondre à une urgence, lui-même ou en t'envoyant chez un confrère. Demande-lui dès maintenant comment ça se passe la nuit et le week-end.", site: "https://www.veterinaire.fr/je-suis-proprietaire-danimaux/fiches-pratiques/la-prise-en-charge-dun-animal-en-urgence", siteNom: "L'urgence vétérinaire, sur veterinaire.fr" }
+    ] },
+    { id: "perdu", emoji: "🔎", theme: "Perdu, trouvé, errant", dyn: "interco", items: [
+      { nom: "I-CAD", pour: "Le fichier des puces. Déclare ton animal perdu, ou retrouvé, dans ton espace.", site: "https://www.i-cad.fr", siteNom: "i-cad.fr" },
+      { nom: "StopErrance.re", pour: "Signale un animal errant : ton signalement part vers les services de ta commune.", site: "https://www.stoperrance.re", siteNom: "stoperrance.re" },
+      { nom: "Animal mort sur la route", pour: "Si tu connais le propriétaire, c'est à lui de le faire enlever. Sinon, préviens la mairie : elle saura qui gère cette route.", site: "https://www.service-public.gouv.fr/particuliers/vosdroits/F35680", siteNom: "La règle, sur service-public.fr" }
+    ] },
+    { id: "maltraitance", emoji: "⚠️", theme: "Un animal maltraité", items: [
+      { nom: "En danger tout de suite ?", pour: "Appelle le 17.", tels: ["17"] },
+      { nom: "Signaler en ligne à la police et à la gendarmerie", pour: "Le formulaire Ma Sécurité, confidentiel. Tu peux aussi parler par tchat avec un policier ou un gendarme, jour et nuit.", site: "https://www.masecurite.interieur.gouv.fr/fr/signaler-une-maltraitance-animale", siteNom: "masecurite.interieur.gouv.fr" },
+      { nom: "Vu sur internet ?", pour: "Une vidéo ou un post public qui montre de la cruauté envers un animal : signale-le sur Pharos.", site: "https://internet-signalement.gouv.fr/", siteNom: "internet-signalement.gouv.fr" },
+      { nom: "Les associations nationales", pour: "La SPA a un formulaire de signalement. 30 Millions d'Amis explique qui prévenir.", site: "https://www.la-spa.fr/signaler-une-maltraitance/", siteNom: "Formulaire de la SPA", site2: "https://www.30millionsdamis.fr/je-mengage/signaler-maltraitance-animale/", site2Nom: "Conseils de 30 Millions d'Amis" }
+    ] },
+    { id: "morsure", emoji: "🐕", theme: "Morsure, chien de catégorie, voisinage", items: [
+      { nom: "Ton chien a mordu quelqu'un", pour: "Déclare-le à la mairie. Il doit voir 3 fois le même vétérinaire : dans les 24 heures, au plus tard 7 jours après, puis le 15e jour. Sinon, amende de 135 €.", site: "https://www.service-public.gouv.fr/particuliers/vosdroits/F24028", siteNom: "La règle, sur service-public.fr" },
+      { nom: "Tu as été mordu", pour: "Va voir un médecin ou les urgences. En cas d'urgence, appelle le 15.", tels: ["15"] },
+      { nom: "Évaluer le comportement d'un chien", pour: "L'Ordre des vétérinaires tient la liste à jour des vétérinaires qui peuvent le faire.", site: "https://www.veterinaire.fr/annuaires/veterinaires-evaluateurs-comportementaux", siteNom: "Annuaire de l'Ordre" },
+      { nom: "Chien de 1re ou 2e catégorie", pour: "Il te faut un permis de détention, gratuit, donné par le maire.", site: "https://www.service-public.gouv.fr/particuliers/vosdroits/F1839", siteNom: "La règle, sur service-public.fr" },
+      { nom: "Aboiements, odeurs, conflit de voisins", pour: "C'est le maire qui est compétent : contacte la police municipale par ta mairie.", site: "https://lannuaire.service-public.gouv.fr/", siteNom: "Trouver ta mairie" }
+    ] },
+    { id: "steriliser", emoji: "✂️", theme: "Stériliser, identifier", dyn: "interco", items: [
+      { nom: "Stérilisation aidée", pour: "Ton intercommunalité aide à stériliser, sous conditions de revenus. Ses contacts sont juste au-dessus : choisis ta commune." },
+      { nom: "La puce", pour: "Obligatoire pour un chien dès 4 mois, pour un chat dès 7 mois, et avant toute vente ou tout don. C'est ton vétérinaire qui la pose.", site: "https://www.i-cad.fr", siteNom: "i-cad.fr" }
+    ] },
+    { id: "voyage", emoji: "✈️", theme: "Voyager ou faire venir un animal", items: [
+      { nom: "La DAAF de La Réunion", pour: "Le service de l'État pour les animaux. Tu veux faire venir un chien ou un chat ? Écris-lui avant le voyage et demande une réponse écrite.", mail: "pifsv.daaf974@agriculture.gouv.fr", site: "https://daaf.reunion.agriculture.gouv.fr/animaux-de-compagnie-a3494.html", siteNom: "Sa page animaux de compagnie" },
+      { nom: "Poste vétérinaire de l'aéroport Roland-Garros", pour: "Pour un animal qui arrive d'un pays hors Union européenne.", tels: ["0262 30 88 39"], mail: "pif974.aeroport.sivep@agriculture.gouv.fr", horaires: "Du lundi au vendredi, 8 h 30-11 h 30 et 13 h 30-16 h." },
+      { nom: "Partir avec ton animal", pour: "Puce, passeport européen, vaccin contre la rage : commence chez ton vétérinaire au moins 3 mois avant. Vérifie aussi les règles de la compagnie aérienne.", site: "https://www.service-public.gouv.fr/particuliers/vosdroits/F21374", siteNom: "La règle, sur service-public.fr", site2: "https://www.douane.gouv.fr/actualites/voyager-avec-son-animal-de-compagnie-4-regles-essentielles-connaitre", site2Nom: "Les 4 règles de la douane" }
+    ] },
+    { id: "veto", emoji: "🩺", theme: "Trouver un vétérinaire, l'État", items: [
+      { nom: "Annuaire des vétérinaires", pour: "L'annuaire officiel de l'Ordre, pour en trouver un près de chez toi.", site: "https://www.veterinaire.fr/annuaires/trouver-un-veterinaire-pour-soigner-mon-animal", siteNom: "veterinaire.fr" },
+      { nom: "DAAF de La Réunion (Saint-Denis)", pour: "L'accueil du service de l'État pour la santé et la protection des animaux. Il peut t'orienter.", tels: ["0262 30 89 89"], mail: "daaf974@agriculture.gouv.fr", horaires: "Du lundi au jeudi, 8 h 30-11 h 30 et 13 h 30-16 h ; le vendredi, 8 h 30-11 h 30 et 13 h 30-15 h." }
+    ] },
+    { id: "deces", emoji: "🕊️", theme: "Quand ton animal meurt", items: [
+      { nom: "Que faire", pour: "Tu peux l'enterrer chez toi selon les règles de ta commune, ou le faire incinérer par ton vétérinaire. Ensuite, déclare sa mort sur I-CAD.", site: "https://www.service-public.gouv.fr/particuliers/vosdroits/F33426", siteNom: "La règle, sur service-public.fr" }
+    ] }
+  ],
+
   /* Fiches santé : orienteur, jamais de diagnostic */
   fiches: [
     {

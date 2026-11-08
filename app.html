@@ -72,7 +72,7 @@
   /* Barre d'onglets du téléphone */
   .tabbar{position:fixed;left:0;right:0;bottom:0;z-index:40;background:rgba(28,24,21,.94);-webkit-backdrop-filter:blur(12px);backdrop-filter:blur(12px);border-top:1px solid var(--line);
     padding:6px max(8px,env(safe-area-inset-right,0px)) calc(6px + env(safe-area-inset-bottom,0px)) max(8px,env(safe-area-inset-left,0px));display:none}
-  .tabbar nav{display:grid;grid-template-columns:repeat(4,1fr);max-width:520px;margin:0 auto}
+  .tabbar nav{display:grid;grid-template-columns:repeat(5,1fr);max-width:520px;margin:0 auto}
   .tabbar a{display:flex;flex-direction:column;align-items:center;gap:2px;padding:6px 2px;min-height:48px;text-decoration:none;font-size:.8rem;color:var(--muted);border-radius:12px;transition:transform .15s var(--ease),color .15s var(--ease)}
   .tabbar a .i{font-size:1.35rem;line-height:1.1}
   .tabbar a:active{transform:scale(.94)}
@@ -165,6 +165,17 @@
   .row2{display:grid;grid-template-columns:1fr 1fr;gap:10px}
   @media (max-width:420px){.row2{grid-template-columns:1fr}}
   .contact{margin-top:12px;display:grid;gap:8px}
+  .themes{display:grid;gap:14px;margin-top:18px}
+  .theme h2{font-size:1.25rem;display:flex;gap:10px;align-items:center;margin-bottom:12px}
+  .ct{border-top:1px solid var(--line);padding:12px 0 2px}
+  .ct:first-of-type{border-top:0;padding-top:0}
+  .ct b{display:block}
+  .ct p{color:var(--muted);font-size:.94rem;margin-top:3px}
+  .ct .lks{display:flex;flex-wrap:wrap;gap:8px;margin-top:8px}
+  .ct .mail,.dyn .mail{font-size:.92rem;color:var(--muted);word-break:break-all;margin-top:6px}
+  a.tel-a{display:inline-block;line-height:1.4;min-height:44px;padding:10px 16px;border-radius:22px;background:rgba(232,161,58,.16);border:1px solid rgba(232,161,58,.45);color:var(--ink);font-weight:600;text-decoration:none;transition:transform .15s var(--ease)}
+  a.tel-a:active{transform:scale(.97)}
+  .dyn{background:var(--bg2);border:1px solid var(--line);border-radius:14px;padding:12px 14px;margin-bottom:12px;display:grid;gap:8px}
   .contact .mail{font-size:.92rem;color:var(--muted);word-break:break-all}
   .annonce{white-space:pre-wrap;background:var(--bg2);border:1px dashed rgba(232,161,58,.45);border-radius:12px;padding:14px;font-size:.95rem;min-height:120px}
   .note-p{font-size:.86rem;color:var(--muted);margin-top:8px}
@@ -214,6 +225,7 @@
     <nav class="tabs-top" aria-label="Rubriques">
       <a href="#sante" data-v="sante">Santé péi</a>
       <a href="#perdu" data-v="perdu">Perdu · Trouvé</a>
+      <a href="#contacts" data-v="contacts">Contacts utiles</a>
       <a href="#assos" data-v="assos">Les assos</a>
       <a href="#carnet" data-v="carnet">Mon carnet</a>
     </nav>
@@ -234,6 +246,7 @@
     <div class="doors">
       <a class="door sos" href="#perdu"><span class="i">🔎</span><div><h3>Un animal perdu ou trouvé ?</h3><p>Les 3 gestes, et le bon numéro selon ta commune.</p></div></a>
       <a class="door" href="#sante"><span class="i">🩺</span><div><h3>Santé péi</h3><p>Chaleur, crapaud, leptospirose, tiques, cyclone : quoi surveiller.</p></div></a>
+      <a class="door" href="#contacts"><span class="i">☎️</span><div><h3>Contacts utiles</h3><p>Urgence, maltraitance, morsure, voyage : qui appeler, par thème.</p></div></a>
       <a class="door" href="#assos"><span class="i">🤝</span><div><h3>Les assos de l'île</h3><p>Adopter, aider, devenir famille d'accueil.</p></div></a>
       <a class="door" href="#carnet"><span class="i">📒</span><div><h3>Mon carnet</h3><p>Vaccins, anti-tiques, vermifuge : les rappels de ton animal.</p></div></a>
     </div>
@@ -306,6 +319,16 @@
     </div>
   </section>
 
+  <!-- CONTACTS -->
+  <section class="view wrap" id="v-contacts" hidden>
+    <div class="kicker">Contacts utiles</div>
+    <h1>Qui appeler, selon ta situation.</h1>
+    <p class="lead">Les numéros et les sites officiels, rangés par thème. Choisis ta commune pour voir ta fourrière et ta stérilisation aidée.</p>
+    <div class="card"><div class="field" style="margin:0"><label for="c-commune">Ta commune</label><select id="c-commune"><option value="">Choisir…</option></select></div></div>
+    <div class="themes" id="themes"></div>
+    <p class="muted small" style="margin-top:14px">Contacts vérifiés sur leurs pages officielles le dimanche 08/11/2026. Un numéro a changé ? Écris-nous : <b style="user-select:all">contact@pix-i-art.re</b></p>
+  </section>
+
   <!-- ASSOS -->
   <section class="view wrap" id="v-assos" hidden>
     <div class="kicker">Les assos de l'île</div>
@@ -368,13 +391,14 @@
   <nav aria-label="Rubriques">
     <a href="#sante" data-v="sante"><span class="i">🩺</span>Santé</a>
     <a href="#perdu" data-v="perdu"><span class="i">🔎</span>Perdu</a>
+    <a href="#contacts" data-v="contacts"><span class="i">☎️</span>Contacts</a>
     <a href="#assos" data-v="assos"><span class="i">🤝</span>Assos</a>
     <a href="#carnet" data-v="carnet"><span class="i">📒</span>Carnet</a>
   </nav>
 </div>
 <div class="toast" id="toast" role="status"></div>
 
-<script src="data/donnees.js"></script>
+<script src="data/donnees.js?v=20261108"></script>
 <script>
 (function(){
   "use strict";
@@ -384,8 +408,8 @@
   function esc(t){ return String(t == null ? "" : t).replace(/[&<>"']/g, function(c){ return {"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]; }); }
   document.addEventListener("touchstart", function(){}, {passive:true}); /* iOS : active les retours à l'appui */
 
-  /* ---------- Navigation par onglets (#sante, #perdu, #assos, #carnet) ---------- */
-  var VUES = ["accueil","sante","perdu","assos","carnet"];
+  /* ---------- Navigation par onglets (#sante, #perdu, #contacts, #assos, #carnet) ---------- */
+  var VUES = ["accueil","sante","perdu","contacts","assos","carnet"];
   function montrer(){
     var v = (location.hash || "").replace("#","");
     if (VUES.indexOf(v) < 0) v = "accueil";
@@ -487,11 +511,15 @@
   function rendreCommunes(){
     var sel = $("#commune");
     Object.keys(KP.communes||{}).sort(function(a,b){ return a.localeCompare(b,"fr"); }).forEach(function(c){ var o = document.createElement("option"); o.value = c; o.textContent = c; sel.appendChild(o); });
-    sel.addEventListener("change", function(){ rendreContact(sel.value); memo("kp_commune", sel.value); });
-    var m = lire("kp_commune"); if (m && KP.communes[m]) { sel.value = m; rendreContact(m); }
+    var sel2 = $("#c-commune");
+    Object.keys(KP.communes||{}).sort(function(a,b){ return a.localeCompare(b,"fr"); }).forEach(function(c){ var o = document.createElement("option"); o.value = c; o.textContent = c; sel2.appendChild(o); });
+    function choisir(v){ sel.value = v; sel2.value = v; rendreContact(v); rendreThemes(); memo("kp_commune", v); }
+    sel.addEventListener("change", function(){ choisir(sel.value); });
+    sel2.addEventListener("change", function(){ choisir(sel2.value); majAnnonce(); });
+    var m = lire("kp_commune"); if (m && KP.communes[m]) { sel.value = m; sel2.value = m; rendreContact(m); }
   }
-  function rendreContact(c){
-    var box = $("#contact");
+  function rendreContact(c, cible){
+    var box = cible || $("#contact");
     if (!c) { box.innerHTML = ""; return; }
     var i = KP.intercos[KP.communes[c]];
     box.innerHTML = '<p class="small muted">'+esc(c)+' dépend <b style="color:var(--ink)">'+esc(i.de)+'</b> ('+esc(i.nom.replace(/^[^(]*\(|\)$/g,""))+'), qui gère la fourrière et l\'errance.</p>'+
@@ -519,6 +547,30 @@
   }
   ["#a-espece","#a-nom","#a-desc","#a-lieu","#a-date","#a-tel","#commune"].forEach(function(s){ $(s).addEventListener("input", majAnnonce); $(s).addEventListener("change", majAnnonce); });
   $("#copier").addEventListener("click", function(){ copier($("#annonce").textContent); });
+
+  /* ---------- Contacts utiles ---------- */
+  function lienTel(t, lib){ return '<a class="tel-a" href="tel:'+esc(t.replace(/\s/g,""))+'">📞 '+(lib ? esc(lib)+' · ' : '')+'<span style="white-space:nowrap">'+esc(t)+'</span></a>'; }
+  function lienExt(u, n){ return '<a class="btn btn-ghost btn-s" href="'+esc(u)+'" target="_blank" rel="noopener">'+esc(n || u.replace("https://",""))+' ↗</a>'; }
+  function rendreThemes(){
+    var c = $("#c-commune").value;
+    $("#themes").innerHTML = (KP.contacts||[]).map(function(t){
+      var dyn = "";
+      var apres = "";
+      if (t.dyn === "antipoison") apres = '<div class="ct"><b>Il a avalé un produit ou une plante ?</b><p>Appelle ton vétérinaire, ou un centre antipoison vétérinaire. Ils répondent environ de 11 h 30 à 3 h du matin chez nous (de 10 h 30 à 2 h d\'avril à octobre).</p><div class="lks">'+(KP.antipoison||[]).map(function(a){ return lienTel(a.tel, a.nom.replace(/ \(.*\)/,"")); }).join("")+'</div></div>';
+      if (t.dyn === "interco") {
+        if (c && KP.communes[c]) { var i = KP.intercos[KP.communes[c]];
+          dyn = '<div class="dyn"><b>'+esc(c)+' : '+esc(i.nom)+'</b><div class="lks">'+i.tels.map(function(n, k){ return lienTel(n, (i.libs && i.libs[k]) || (n.indexOf("0800")===0?"Numéro gratuit":"Standard")); }).join("")+'</div>'+
+            (i.note ? '<p class="small muted">'+esc(i.note)+'</p>' : "")+
+            '<p class="mail">✉️ <span style="user-select:all">'+esc(i.mail)+'</span></p><div class="lks">'+lienExt(i.site)+'</div></div>';
+        } else dyn = '<div class="dyn"><p class="small muted">Choisis ta commune en haut de la page pour voir le numéro de ta fourrière et de ta stérilisation aidée.</p></div>';
+      }
+      return '<section class="card theme" id="th-'+esc(t.id)+'"><h2><span aria-hidden="true">'+esc(t.emoji)+'</span>'+esc(t.theme)+'</h2>'+dyn+
+        t.items.map(function(x){
+          var lks = (x.tels||[]).map(lienTel).join("")+(x.site ? lienExt(x.site, x.siteNom) : "")+(x.site2 ? lienExt(x.site2, x.site2Nom) : "");
+          return '<div class="ct"><b>'+esc(x.nom)+'</b><p>'+esc(x.pour)+'</p>'+(x.horaires ? '<p class="small muted">'+esc(x.horaires)+'</p>' : "")+(x.mail ? '<p class="mail">✉️ <span style="user-select:all">'+esc(x.mail)+'</span></p>' : "")+(lks ? '<div class="lks">'+lks+'</div>' : "")+'</div>';
+        }).join("")+apres+'</section>';
+    }).join("");
+  }
 
   /* ---------- Assos ---------- */
   function rendreAssos(){
@@ -597,7 +649,7 @@
   /* ---------- Démarrage ---------- */
   $("#maj").textContent = KP.maj || "";
   $("#antipoison").innerHTML = (KP.antipoison||[]).map(function(a){ return '<div class="tel"><span>'+esc(a.nom)+'</span><b>'+esc(a.tel)+'</b></div>'; }).join("");
-  rendreFiches("tout"); rendreCommunes(); rendreEtapes(); rendreAssos(); rendreCarnet(); montrer();
+  rendreFiches("tout"); rendreCommunes(); rendreThemes(); rendreEtapes(); rendreAssos(); rendreCarnet(); montrer();
 })();
 </script>
 </body>

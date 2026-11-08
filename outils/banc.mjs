@@ -91,7 +91,7 @@ for (const page of ["index.html", "app.html", "mentions.html"]) {
 await cdp("Emulation.setDeviceMetricsOverride", { width: 375, height: 812, deviceScaleFactor: 2, mobile: true });
 await aller(BASE + "app.html");
 await ev(`localStorage.clear()`); await aller(BASE + "app.html");
-for (const v of ["accueil", "sante", "perdu", "assos", "carnet"]) {
+for (const v of ["accueil", "sante", "perdu", "contacts", "assos", "carnet"]) {
   await ev(`location.hash='#${v}'`); await sleep(250);
   const vis = await ev(`[...document.querySelectorAll('.view')].filter(s=>!s.hidden).map(s=>s.id)`);
   ok(`vue #${v} seule visible`, vis.length === 1 && vis[0] === "v-" + v, vis.join(","));
@@ -121,6 +121,18 @@ ok("« dépend du TCO » au masculin", coms.find(c => c.c === "Saint-Paul")?.txt
 await ev(`(()=>{const s=document.querySelector('#commune');s.value='Cilaos';s.dispatchEvent(new Event('change'))})()`);
 await aller(BASE + "app.html#perdu");
 ok("commune retenue après rechargement", (await ev(`document.querySelector('#commune').value`)) === "Cilaos");
+// Contacts utiles
+await ev(`location.hash='#contacts'`); await sleep(250);
+const ct = await ev(`({n:document.querySelectorAll('#themes .theme').length, com:document.querySelector('#c-commune').value, civis:document.querySelector('#th-perdu').textContent.includes('CIVIS'), tels:[...document.querySelectorAll('#themes a.tel-a')].map(a=>a.getAttribute('href')), ext:[...document.querySelectorAll('#themes a[target=_blank]')].every(a=>a.rel.includes('noopener')&&a.href.startsWith('https://'))})`);
+ok("contacts : 8 thèmes", ct.n === 8 && KP.contacts.length === 8, ct.n);
+ok("contacts : commune reprise (Cilaos)", ct.com === "Cilaos", ct.com);
+ok("contacts : Cilaos ⇒ CIVIS affichée", ct.civis);
+ok("contacts : numéros cliquables au bon format", ct.tels.length >= 10 && ct.tels.every(h => /^tel:\d{2,10}$/.test(h)), JSON.stringify(ct.tels));
+ok("contacts : liens externes en https + noopener", ct.ext);
+await ev(`(()=>{const s=document.querySelector('#c-commune');s.value='Saint-Denis';s.dispatchEvent(new Event('change'))})()`);
+ok("contacts : changer de commune ⇒ CINOR + même commune dans Perdu", (await ev(`document.querySelector('#th-perdu').textContent.includes('CINOR') && document.querySelector('#commune').value==='Saint-Denis'`)));
+await ev(`(()=>{const s=document.querySelector('#c-commune');s.value='Cilaos';s.dispatchEvent(new Event('change'))})()`); await ev(`location.hash='#perdu'`); await sleep(200);
+for (const t of KP.contacts) for (const x of t.items) ok(`contact « ${x.nom} » : un moyen de joindre ou une consigne`, !!(x.tels || x.site || x.mail || t.dyn), t.id);
 // annonce
 const ann = await ev(`(()=>{const set=(s,v)=>{const e=document.querySelector(s);e.value=v;e.dispatchEvent(new Event('input'))};set('#a-nom','Tiboy');set('#a-desc','mâle, roux');set('#a-lieu','La Saline');set('#a-date','2026-11-06');set('#a-tel','0692 00 00 00');const p=document.querySelector('#annonce').textContent;document.querySelector('#t-trouve').click();const t=document.querySelector('#annonce').textContent;document.querySelector('#t-adopter').click();const h=document.querySelector('#annonce-card').hidden;return {p,t,h}})()`);
 ok("annonce perdu : titre + commune", ann.p.startsWith("🆘 CHIEN PERDU · Cilaos"), ann.p.split("\n")[0]);
