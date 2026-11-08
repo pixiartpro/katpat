@@ -18,6 +18,7 @@ const ok = (nom, cond, detail = "") => { res.push({ nom, ok: !!cond, detail }); 
 // Le jour où un domaine est branché, vérifier aussi que l'ancienne adresse redirige vers la nouvelle.
 const IMPRIMES = [
   { url: "https://pixiartpro.github.io/katpat/app.html", page: "app.html", document: "plaquette pour les assos (brouillon du 08/11/2026, QR du recto-verso)" },
+  { url: "https://pixiartpro.github.io/katpat/app.html", page: "app.html", document: "cartes QR pour les adoptants (kit démo refuge, brouillon du 08/11/2026)" },
 ];
 for (const { url, page, document } of IMPRIMES) {
   let present = false; try { readFileSync(join(ROOT, page)); present = true; } catch {}
