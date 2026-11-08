@@ -109,6 +109,10 @@ for (const page of ["index.html", "app.html", "mentions.html"]) {
     ok("vitrine : statut « Démo · relecture vétérinaire à venir » affiché", t.includes("Démo · relecture vétérinaire à venir"));
     ok("vitrine : plus de promesse de pros (toiletteurs, pensions)", !/toiletteurs|pensions/.test(t));
   }
+  {
+    const fav = await ev(`Promise.all([...document.querySelectorAll('link[rel=icon]')].map(l=>fetch(l.href).then(r=>r.ok&&!l.href.startsWith('data:')))).then(a=>a.length>=2&&a.every(Boolean))`);
+    ok(`${page} : favicon patte (SVG + PNG 32) chargé`, fav);
+  }
 }
 
 // App : vues
