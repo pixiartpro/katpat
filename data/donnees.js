@@ -7,7 +7,7 @@ window.KP = {
   maj: "06/11/2026",
 
   /* Relecture des fiches santé par un vétérinaire. Vide tant qu'elle n'est pas faite : l'appli affiche alors
-     « en attente de relecture ». Le jour où c'est fait, écrire par exemple : "le 15/12/2026 par le Dr X (clinique Y)". */
+     « en attente de relecture ». Le jour où c'est fait, écrire par exemple : "le 15/12/2026" (ou, si le vétérinaire l'accepte, "le 15/12/2026 (Dr X, clinique Y)") ; uniquement quand TOUTES les fiches sont relues, et vider le champ si une fiche change ensuite. */
   relectureVeto: "",
 
   /* Numéros d'urgence animale (centres antipoison vétérinaires, 7 j/7 de 8 h 30 à minuit heure de métropole ;
