@@ -12,6 +12,22 @@ const ROOT = process.argv[3];
 const res = [];
 const ok = (nom, cond, detail = "") => { res.push({ nom, ok: !!cond, detail }); };
 
+// ---------- 0. QR imprimés (garde-fou repris de Pixie Mariage, 08/11/2026) ----------
+// Le papier ne se corrige pas : chaque QR imprimé doit toujours mener à une vraie page.
+// Un nouveau document imprimé avec un QR = une ligne de plus ici, AVANT l'impression.
+// Le jour où un domaine est branché, vérifier aussi que l'ancienne adresse redirige vers la nouvelle.
+const IMPRIMES = [
+  { url: "https://pixiartpro.github.io/katpat/app.html", page: "app.html", document: "plaquette pour les assos (brouillon du 08/11/2026, QR du recto-verso)" },
+];
+for (const { url, page, document } of IMPRIMES) {
+  let present = false; try { readFileSync(join(ROOT, page)); present = true; } catch {}
+  ok(`QR imprimé « ${document} » : ${page} existe toujours`, present, url);
+  if (/^https?:\/\/(127\.0\.0\.1|localhost)/.test(BASE) || BASE === url.slice(0, url.lastIndexOf("/") + 1)) {
+    const r = await fetch(BASE + page).then(x => x.status).catch(e => String(e));
+    ok(`QR imprimé « ${document} » : ${BASE + page} répond`, r === 200, r);
+  }
+}
+
 // ---------- 1. Données (sans navigateur) ----------
 {
   const src = readFileSync(join(ROOT, "data/donnees.js"), "utf8");
