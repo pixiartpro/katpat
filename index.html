@@ -52,8 +52,15 @@
   /* Hero */
   header.hero{position:relative;min-height:82vh;display:flex;align-items:flex-end;overflow:hidden}
   .hero-bg{position:absolute;inset:0;background:url('assets/hero-site.jpg') center/cover no-repeat;transform:scale(1.05)}
-  .hero-bg::after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,rgba(19,17,15,.35) 0%,rgba(19,17,15,.55) 45%,rgba(19,17,15,.96) 100%)}
+  .hero-bg::after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,rgba(19,17,15,0) 72%,rgba(19,17,15,.95) 100%),linear-gradient(90deg,rgba(19,17,15,.9) 0%,rgba(19,17,15,.7) 48%,rgba(19,17,15,.06) 76%)}
   .hero-in{position:relative;z-index:2;width:100%;padding:0 22px 64px}
+  /* Téléphone : la photo seule, sans texte dessus (le chien net est à droite, en bas), puis le texte sur fond sombre */
+  @media (max-width:700px){
+    header.hero{min-height:0;display:block}
+    .hero-bg{position:relative;inset:auto;height:68vw;transform:none;background-size:175% auto;background-position:84% 100%}
+    .hero-bg::after{background:linear-gradient(180deg,rgba(19,17,15,0) 86%,rgba(19,17,15,1) 100%)}
+    .hero-in{padding-top:6px}
+  }
   .badge{display:inline-flex;align-items:center;gap:8px;background:rgba(232,161,58,.16);border:1px solid rgba(232,161,58,.4);color:var(--amber-soft);padding:6px 14px;border-radius:999px;font-size:.78rem;font-weight:500;letter-spacing:.02em;margin-bottom:20px}
   .eyebrow{font-size:.78rem;letter-spacing:.3em;text-transform:uppercase;color:var(--muted);margin-bottom:10px}
   header h1{font-size:clamp(3.4rem,12vw,7rem);font-weight:700;letter-spacing:-.5px}
@@ -127,7 +134,7 @@
 <header class="hero">
   <div class="hero-bg"></div>
   <div class="hero-in wrap">
-    <span class="badge">🐾 Nouveau : le carnet péi est ouvert</span>
+    <span class="badge">🐾 Démo · relecture vétérinaire à venir</span>
     <div class="eyebrow">La Réunion · Monde animalier</div>
     <h1 class="h1-logo"><img src="assets/logo-katpat.svg" alt="Kat'Pat'" width="560" height="184" /></h1>
     <p class="lead">Le rendez-vous des chiens &amp; des chats péi.</p>
@@ -143,7 +150,7 @@
   <div class="wrap">
     <div class="kicker">C'est quoi Kat'Pat' ?</div>
     <h2>Un monde pour les animaux de La Réunion.</h2>
-    <p>Kat'Pat', c'est le futur point de repère péi pour tout ce qui touche aux chiens et aux chats : des conseils utiles adaptés à notre île, de quoi aider un animal perdu ou à adopter, et un coup de projecteur sur les associations et les pros qui s'en occupent.</p>
+    <p>Kat'Pat', c'est le futur point de repère péi pour tout ce qui touche aux chiens et aux chats : des conseils utiles adaptés à notre île, de quoi aider un animal perdu ou à adopter, les bons contacts selon ta situation, et un coup de projecteur sur les associations qui s'en occupent.</p>
     <p class="note">On le construit petit à petit, dans l'ordre : d'abord ce qui sert vraiment, le reste vient ensuite. Cette page grandit à chaque étape.</p>
   </div>
 </section>
@@ -161,15 +168,15 @@
       </div>
       <div class="mod">
         <div class="ico">🔎</div>
-        <h3>Perdu · Trouvé · À adopter</h3>
-        <p>Une page claire, reliée aux groupes Facebook qui marchent et aux associations. On structure, on ne remplace pas.</p>
+        <h3>Perdu · Trouvé · J'accueille</h3>
+        <p>Les bons gestes dans l'ordre, le numéro de ta fourrière, et une annonce prête à coller dans les groupes Facebook de ta commune. On structure, on ne remplace pas.</p>
         <a class="soon" href="app.html#perdu">Ouvrir →</a>
       </div>
       <div class="mod">
         <div class="ico">🤝</div>
-        <h3>Les assos &amp; les pros</h3>
-        <p>Les associations mises en lumière, et les bons professionnels (vétos, toiletteurs, pensions) près de chez toi.</p>
-        <a class="soon" href="app.html#assos">Ouvrir →</a>
+        <h3>Les assos &amp; les bons contacts</h3>
+        <p>Les associations de l'île, et qui appeler selon ta situation : urgence, maltraitance, morsure, voyage.</p>
+        <a class="soon" href="app.html#assos">Les assos →</a> <a class="soon" href="app.html#contacts">Les contacts →</a>
       </div>
     </div>
   </div>

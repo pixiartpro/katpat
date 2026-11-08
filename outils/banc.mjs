@@ -101,12 +101,20 @@ for (const page of ["index.html", "app.html", "mentions.html"]) {
   ok(`${page} : toutes les ressources chargées`, ko.length === 0, JSON.stringify(ko));
   const imgs = await ev(`[...document.images].filter(i=>i.complete && i.naturalWidth===0 && i.loading!=='lazy').map(i=>i.src)`);
   ok(`${page} : images non cassées`, imgs.length === 0, imgs.join(","));
+  if (page === "index.html") {
+    const t = await ev(`document.body.textContent`);
+    ok("vitrine : plus de pastille « Nouveau »", !t.includes("Nouveau :"));
+    ok("vitrine : statut « Démo · relecture vétérinaire à venir » affiché", t.includes("Démo · relecture vétérinaire à venir"));
+    ok("vitrine : plus de promesse de pros (toiletteurs, pensions)", !/toiletteurs|pensions/.test(t));
+  }
 }
 
 // App : vues
 await cdp("Emulation.setDeviceMetricsOverride", { width: 375, height: 812, deviceScaleFactor: 2, mobile: true });
 await aller(BASE + "app.html");
 await ev(`localStorage.clear()`); await aller(BASE + "app.html");
+const porte = await ev(`(()=>{const d=document.querySelector('#v-accueil .doors').getBoundingClientRect(),i=document.querySelector('#v-accueil .hero-app img').getBoundingClientRect();return {d:Math.round(d.top),i:Math.round(i.top)}})()`);
+ok("accueil téléphone : les portes passent avant la photo", porte.d < porte.i, JSON.stringify(porte));
 for (const v of ["accueil", "sante", "perdu", "contacts", "assos", "carnet"]) {
   await ev(`location.hash='#${v}'`); await sleep(250);
   const vis = await ev(`[...document.querySelectorAll('.view')].filter(s=>!s.hidden).map(s=>s.id)`);
@@ -129,9 +137,15 @@ ok("filtre chien cohérent", filtres.chien === KP.fiches.filter(f => /chien/.tes
 ok("au moins une fiche par filtre", Object.values(filtres).every(n => n > 0), JSON.stringify(filtres));
 // Perdu : 24 communes
 await ev(`location.hash='#perdu'`); await sleep(200);
-const coms = await ev(`(()=>{const s=document.querySelector('#commune');const out=[];[...s.options].slice(1).forEach(o=>{s.value=o.value;s.dispatchEvent(new Event('change'));const c=document.querySelector('#contact');out.push({c:o.value,tels:c.querySelectorAll('.tel').length,txt:c.textContent.slice(0,60)})});return out})()`);
+const coms = await ev(`(()=>{const s=document.querySelector('#commune');const out=[];[...s.options].slice(1).forEach(o=>{s.value=o.value;s.dispatchEvent(new Event('change'));const c=document.querySelector('#contact');out.push({c:o.value,tels:c.querySelectorAll('a.tel-a').length,fmt:[...c.querySelectorAll('a.tel-a')].every(a=>/^tel:\\d{2,10}$/.test(a.getAttribute('href'))),txt:c.textContent.slice(0,60)})});return out})()`);
 ok("24 communes dans la liste", coms.length === 24, coms.length);
 ok("chaque commune affiche un numéro", coms.every(c => c.tels > 0), JSON.stringify(coms.filter(c => !c.tels)));
+ok("Perdu : numéros de la commune cliquables (tel:)", coms.every(c => c.fmt), JSON.stringify(coms.filter(c => !c.fmt)));
+const ordre = await ev(`(()=>{const a=document.querySelector('.commune-card'),b=document.querySelector('#steps-card');return !!(a&&b&&(a.compareDocumentPosition(b)&Node.DOCUMENT_POSITION_FOLLOWING))})()`);
+ok("Perdu : la commune passe avant les étapes", ordre);
+ok("Perdu : plus de « à côté » dans les étapes", !(await ev(`document.querySelector('#steps-card').textContent.includes('à côté')`)));
+const stDenis = await ev(`(()=>{const s=document.querySelector('#commune');s.value='Saint-Denis';s.dispatchEvent(new Event('change'));return document.querySelector('#contact').textContent})()`);
+ok("Perdu : CINOR signalée « pas encore confirmée »", stDenis.includes("pas encore confirmés"), stDenis.slice(0, 120));
 ok("« dépend du TCO » au masculin", coms.find(c => c.c === "Saint-Paul")?.txt.includes("dépend du TCO"), coms.find(c => c.c === "Saint-Paul")?.txt);
 // mémoire de la commune
 await ev(`(()=>{const s=document.querySelector('#commune');s.value='Cilaos';s.dispatchEvent(new Event('change'))})()`);
@@ -157,12 +171,23 @@ ok("annonce perdu : nom, description, numéro", ann.p.includes("Tiboy, chien per
 ok("annonce trouvé : bascule", ann.t.startsWith("🐾 CHIEN TROUVÉ"), ann.t.split("\n")[0]);
 ok("annonce trouvé : ne divulgue pas le nom saisi", !ann.t.includes("Tiboy"), ann.t);
 ok("adopter : carte annonce masquée", ann.h === true);
+ok("adopter : la grille passe en une colonne", await ev(`document.querySelector('#perdu-panel').classList.contains('solo') && document.querySelector('#annonce-col').hidden`));
+await ev(`document.querySelector('#t-perdu').click()`);
 // injection
 const inj = await ev(`(()=>{document.querySelector('#t-perdu').click();const e=document.querySelector('#a-desc');e.value='<img src=x onerror=window.__pwn=1>';e.dispatchEvent(new Event('input'));return {html:document.querySelector('#annonce').innerHTML.includes('<img'),pwn:!!window.__pwn}})()`);
 await sleep(300);
 ok("annonce : pas d'injection HTML", !inj.html && !(await ev(`!!window.__pwn`)), JSON.stringify(inj));
+// Promesses tenues et statuts honnêtes
+ok("accueil appli : plus de « 3 gestes »", !(await ev(`document.body.textContent.includes('3 gestes')`)));
+ok("contacts : plus de « Contacts vérifiés »", !(await ev(`document.querySelector('#v-contacts').textContent.includes('Contacts vérifiés')`)));
+ok("contacts : antipoison et CINOR à confirmer, dit en clair", await ev(`document.querySelector('#v-contacts').textContent.includes("n'ont pas encore été confirmés par un appel")`));
+await ev(`location.hash='#sante'`); await sleep(200);
+const stat = await ev(`({b:document.querySelector('#statut-fiches').textContent, t:document.querySelectorAll('#fiches details').length, n:[...document.querySelectorAll('#fiches details')].filter(d=>d.textContent.includes('pas encore relue par un vétérinaire')).length})`);
+ok("santé : bandeau « en attente de relecture » tant que relectureVeto est vide", KP.relectureVeto ? stat.b.includes("relues par un vétérinaire") : stat.b.includes("en attente de relecture"), stat.b.slice(0, 80));
+ok("santé : chaque fiche dit qu'elle n'est pas encore relue", KP.relectureVeto ? true : (stat.t > 0 && stat.n === stat.t), stat.n + '/' + stat.t);
 // Carnet
 await ev(`location.hash='#carnet'`); await sleep(200);
+ok("carnet vide : pas de carte « Garder une copie »", await ev(`document.querySelector('#copie-card').hidden`));
 ok("carnet vide au départ", await ev(`!!document.querySelector('#animaux .empty')`));
 const today = new Date(); const isoJ = d => d.toISOString().slice(0, 10);
 const ilya = n => { const d = new Date(); d.setDate(d.getDate() - n); return isoJ(d); };
@@ -172,6 +197,10 @@ let etats = await ev(`[...document.querySelectorAll('#animaux .etat')].map(e=>e.
 ok("carnet : vaccin d'il y a 400 j = en retard", etats[0] === "en retard", etats.join(","));
 ok("carnet : anti-tiques mensuel d'il y a 20 j = bientôt", /^dans \d+ j$/.test(etats[1]), etats.join(","));
 ok("carnet : vermifuge d'il y a 5 j = à jour", etats[2] === "à jour", etats.join(","));
+const cop = await ev(`(()=>{document.querySelector('#copie-cop').click();return {vis:!document.querySelector('#copie-card').hidden, t:document.querySelector('#copie-txt').textContent}})()`);
+ok("carnet : carte « Garder une copie » visible", cop.vis);
+ok("carnet : la copie contient nom, puce, dernières et prochaines dates", cop.t.includes("Moka (chien)") && cop.t.includes("Puce : 250269812345678") && (cop.t.match(/Prochain \(calculé\)/g)||[]).length === 3 && cop.t.includes("dernier le"), cop.t);
+ok("carnet : la copie n'affirme jamais « sauvegardé »", !/sauvegard/i.test(cop.t));
 await aller(BASE + "app.html#carnet");
 ok("carnet : Moka toujours là après rechargement", (await ev(`document.querySelector('#animaux h3')?.textContent||''`)).includes("Moka"));
 // modifier

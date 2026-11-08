@@ -6,6 +6,10 @@
 window.KP = {
   maj: "06/11/2026",
 
+  /* Relecture des fiches santé par un vétérinaire. Vide tant qu'elle n'est pas faite : l'appli affiche alors
+     « en attente de relecture ». Le jour où c'est fait, écrire par exemple : "le 15/12/2026 par le Dr X (clinique Y)". */
+  relectureVeto: "",
+
   /* Numéros d'urgence animale (centres antipoison vétérinaires, 7 j/7 de 8 h 30 à minuit heure de métropole ;
      à La Réunion : 11 h 30 - 3 h quand la métropole est à l'heure d'hiver, 10 h 30 - 2 h à l'heure d'été).
      Numéros revus le 06/11/2026 (sources concordantes, pas de page officielle lisible : appel test à faire). */
@@ -18,7 +22,7 @@ window.KP = {
      Sources : sites des intercos lus le 06/11/2026 (casud.re, tco.re, civis.re) ; à défaut stoperrance.re.
      CINOR : aucun numéro sur cinor.re, ceux-ci viennent de stoperrance.re (appel test à faire). */
   intercos: {
-    CINOR:  { de: "de la CINOR", nom: "CINOR (Nord)",  tels: ["0800 315 316", "0262 28 98 84"], mail: "environnement@cinor.org", site: "https://www.cinor.re" },
+    CINOR:  { de: "de la CINOR", nom: "CINOR (Nord)",  tels: ["0800 315 316", "0262 28 98 84"], mail: "environnement@cinor.org", site: "https://www.cinor.re", aConfirmer: "Numéros relevés sur stoperrance.re : on ne les a pas encore confirmés par un appel." },
     CIREST: { de: "de la CIREST", nom: "CIREST (Est)",  tels: ["0262 46 06 49"], libs: ["Fourrière"], mail: "fourriere@cirest.fr", site: "https://www.cirest.fr" },
     TCO:    { de: "du TCO", nom: "TCO (Ouest)",   tels: ["0800 605 605", "0262 32 12 12"], libs: ["Numéro gratuit (depuis un fixe)", "Standard"], mail: "sterilisation@tco.re", site: "https://www.tco.re" },
     CIVIS:  { de: "de la CIVIS", nom: "CIVIS (Sud-Ouest)", tels: ["0800 501 501", "0262 35 25 58", "0262 25 98 17"], libs: ["Numéro gratuit (captures)", "Fourrière Espoir", "Refuge Chance"], mail: "accueil@civis.re", site: "https://www.civis.re" },

@@ -96,7 +96,8 @@
   /* Accueil de l'appli */
   .hero-app{display:grid;grid-template-columns:1.1fr .9fr;gap:28px;align-items:center}
   .hero-app img{width:100%;height:auto;aspect-ratio:4/3;object-fit:cover;object-position:62% 60%;border-radius:var(--radius);max-width:100%;box-shadow:var(--shadow)}
-  @media (max-width:780px){.hero-app{grid-template-columns:1fr}.hero-app img{aspect-ratio:16/9}}
+  @media (max-width:780px){.hero-app{grid-template-columns:1fr}.hero-app img{aspect-ratio:16/9}
+    #v-accueil:not([hidden]){display:flex;flex-direction:column}#v-accueil .hero-app{display:contents}#v-accueil .doors{order:2}#v-accueil .hero-app img{order:3;margin-top:18px}#v-accueil .veto{order:4}#v-accueil .actions{order:5}}
   .doors{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px;margin-top:26px}
   @media (max-width:560px){.doors{grid-template-columns:1fr}}
   .door{display:flex;gap:14px;align-items:flex-start;background:var(--card);border:1px solid var(--line);border-radius:var(--radius);padding:18px;text-decoration:none;transition:border-color .2s var(--ease),transform .15s var(--ease)}
@@ -148,6 +149,9 @@
   .seg button{border:0;background:transparent;border-radius:12px;padding:10px 6px;white-space:nowrap;font-size:.92rem;cursor:pointer;color:var(--muted);font-weight:500;transition:background-color .2s var(--ease),color .2s var(--ease),transform .15s var(--ease)}
   .seg button:active{transform:scale(.96)}
   .seg button[aria-selected="true"]{background:var(--amber);color:#1a1510}
+  .commune-card{margin-top:20px}
+  .commune-card .lks{display:flex;flex-wrap:wrap;gap:8px}
+  .panel.solo{grid-template-columns:1fr}
   .panel{margin-top:20px;display:grid;grid-template-columns:minmax(0,1.15fr) minmax(0,.85fr);gap:18px;align-items:start}
   @media (max-width:860px){.panel{grid-template-columns:1fr}}
   .card{background:var(--card);border:1px solid var(--line);border-radius:var(--radius);padding:20px;min-width:0}
@@ -244,7 +248,7 @@
       <img src="assets/concours-app.jpg" alt="Deux chows-chows présentés lors d'un concours canin à La Réunion" width="1400" height="589" />
     </div>
     <div class="doors">
-      <a class="door sos" href="#perdu"><span class="i">🔎</span><div><h3>Un animal perdu ou trouvé ?</h3><p>Les 3 gestes, et le bon numéro selon ta commune.</p></div></a>
+      <a class="door sos" href="#perdu"><span class="i">🔎</span><div><h3>Un animal perdu ou trouvé ?</h3><p>Les bons gestes dans l'ordre, et le numéro de ta commune.</p></div></a>
       <a class="door" href="#sante"><span class="i">🩺</span><div><h3>Santé péi</h3><p>Chaleur, crapaud, leptospirose, tiques, cyclone : quoi surveiller.</p></div></a>
       <a class="door" href="#contacts"><span class="i">☎️</span><div><h3>Contacts utiles</h3><p>Urgence, maltraitance, morsure, voyage : qui appeler, par thème.</p></div></a>
       <a class="door" href="#assos"><span class="i">🤝</span><div><h3>Les assos de l'île</h3><p>Adopter, aider, devenir famille d'accueil.</p></div></a>
@@ -262,7 +266,7 @@
     <div class="kicker">Santé péi</div>
     <h1>Les réflexes pour notre climat.</h1>
     <p class="lead">Chaud, humide, sans hiver : à La Réunion, certains dangers sont là toute l'année. Ouvre une fiche pour savoir quoi surveiller et quoi faire.</p>
-    <div class="veto"><span>🩺</span><p><b>Ces fiches ne remplacent pas ton vétérinaire.</b> Elles t'aident à reconnaître une urgence et à préparer ta question.</p></div>
+    <div class="veto" id="statut-fiches"><span>🩺</span><p><b>Ces fiches ne remplacent pas ton vétérinaire.</b> Elles t'aident à reconnaître une urgence et à préparer ta question.</p></div>
     <div class="filters" role="group" aria-label="Filtrer les fiches">
       <button class="chip" type="button" data-f="tout" aria-pressed="true">Tout</button>
       <button class="chip" type="button" data-f="urgence" aria-pressed="false">Urgences</button>
@@ -288,15 +292,16 @@
       <button type="button" role="tab" id="t-adopter" aria-selected="false" data-s="adopter">J'accueille</button>
     </div>
 
-    <div class="panel">
+    <div class="card commune-card">
+      <h3>📍 Ta commune</h3>
+      <label for="commune">Choisis ta commune : on te donne le bon numéro (fourrière, errance, stérilisation aidée)</label>
+      <select id="commune"><option value="">Choisir…</option></select>
+      <div class="contact" id="contact"></div>
+    </div>
+
+    <div class="panel" id="perdu-panel">
       <div class="card" id="steps-card"></div>
-      <div style="display:grid;gap:18px;min-width:0">
-        <div class="card">
-          <h3>📍 Ta commune</h3>
-          <label for="commune">Choisis ta commune pour avoir le bon numéro (fourrière, errance, stérilisation aidée)</label>
-          <select id="commune"><option value="">Choisir…</option></select>
-          <div class="contact" id="contact"></div>
-        </div>
+      <div style="display:grid;gap:18px;min-width:0" id="annonce-col">
         <div class="card" id="annonce-card">
           <h3>📝 Préparer l'annonce</h3>
           <p class="muted small" style="margin-bottom:12px">Remplis, copie, colle dans les groupes Facebook de ta commune. Rien n'est envoyé : tout reste sur ton téléphone.</p>
@@ -326,7 +331,7 @@
     <p class="lead">Les numéros et les sites officiels, rangés par thème. Choisis ta commune pour voir ta fourrière et ta stérilisation aidée.</p>
     <div class="card"><div class="field" style="margin:0"><label for="c-commune">Ta commune</label><select id="c-commune"><option value="">Choisir…</option></select></div></div>
     <div class="themes" id="themes"></div>
-    <p class="muted small" style="margin-top:14px">Contacts vérifiés sur leurs pages officielles le dimanche 08/11/2026. Un numéro a changé ? Écris-nous : <b style="user-select:all">contact@pix-i-art.re</b></p>
+    <p class="muted small" style="margin-top:14px">Contacts relevés sur leurs pages officielles le dimanche 08/11/2026. Les numéros des centres antipoison et ceux de la CINOR n'ont pas encore été confirmés par un appel : en cas de doute, vérifie sur le site de l'organisme. Un numéro a changé ? Écris-nous : <b style="user-select:all">contact@pix-i-art.re</b></p>
   </section>
 
   <!-- ASSOS -->
@@ -375,7 +380,15 @@
           <button class="btn btn-ghost" type="button" id="c-cancel" hidden>Annuler</button>
         </div>
       </form>
-      <div id="animaux" style="display:grid;gap:14px;min-width:0"></div>
+      <div style="display:grid;gap:14px;min-width:0">
+        <div id="animaux" style="display:grid;gap:14px;min-width:0"></div>
+        <div class="card" id="copie-card" hidden>
+          <h3>📤 Garder une copie</h3>
+          <p class="muted small" style="margin-bottom:12px">Ton carnet n'existe que sur ce téléphone. Envoie-toi une copie en message, par mail ou dans tes notes : si tu changes de téléphone, tu pourras ressaisir les dates.</p>
+          <div class="actions"><button class="btn btn-amber" type="button" id="copie-env" hidden>Envoyer une copie</button><button class="btn btn-ghost" type="button" id="copie-cop">Copier le texte</button></div>
+          <pre class="annonce" id="copie-txt" hidden></pre>
+        </div>
+      </div>
     </div>
   </section>
 </main>
@@ -398,7 +411,7 @@
 </div>
 <div class="toast" id="toast" role="status"></div>
 
-<script src="data/donnees.js?v=20261108"></script>
+<script src="data/donnees.js?v=20261108b"></script>
 <script>
 (function(){
   "use strict";
@@ -423,11 +436,12 @@
   /* ---------- Petit message ---------- */
   var tt;
   function toast(m){ var t = $("#toast"); t.textContent = m; t.classList.add("on"); clearTimeout(tt); tt = setTimeout(function(){ t.classList.remove("on"); }, 1800); }
-  function copier(texte){
+  function copier(texte, noeud, ok){
+    var n = noeud || $("#annonce");
     if (navigator.clipboard && navigator.clipboard.writeText) {
-      navigator.clipboard.writeText(texte).then(function(){ toast("Copié ✓"); }, function(){ selection(); });
+      navigator.clipboard.writeText(texte).then(function(){ toast(ok || "Copié ✓"); }, function(){ selection(); });
     } else selection();
-    function selection(){ var r = document.createRange(); r.selectNodeContents($("#annonce")); var s = getSelection(); s.removeAllRanges(); s.addRange(r); toast("Texte sélectionné : copie-le"); }
+    function selection(){ n.hidden = false; var r = document.createRange(); r.selectNodeContents(n); var s = getSelection(); s.removeAllRanges(); s.addRange(r); toast("Texte sélectionné : copie-le"); }
   }
 
   /* ---------- Santé ---------- */
@@ -453,9 +467,12 @@
         liste("Ce que tu peux faire tout de suite", f.faire, "faire")+
         liste("À éviter", f.eviter, "eviter")+
         (f.antipoison ? '<div class="blk"><h4>Centres antipoison vétérinaires</h4>'+telsAntipoison()+'</div>' : "")+
-        src+'</div></details>';
+        src+'<p class="src">'+(KP.relectureVeto ? "Relue par un vétérinaire "+esc(KP.relectureVeto)+"." : "⏳ Fiche du "+esc(KP.maj)+", pas encore relue par un vétérinaire.")+'</p></div></details>';
     }).join("");
     $("#fiches").innerHTML = html || '<p class="muted">Aucune fiche pour ce filtre.</p>';
+    $("#statut-fiches p").innerHTML = KP.relectureVeto
+      ? "<b>Fiches relues par un vétérinaire "+esc(KP.relectureVeto)+".</b> Elles ne remplacent pas ton vétérinaire : elles t'aident à reconnaître une urgence et à préparer ta question."
+      : "<b>Fiches en attente de relecture par un vétérinaire.</b> Elles s'appuient sur des sources officielles, citées en bas de chaque fiche, mais aucun vétérinaire ne les a encore validées. Elles ne remplacent pas ton vétérinaire : en cas de doute, appelle-le.";
   }
   $$(".chip").forEach(function(b){
     b.addEventListener("click", function(){
@@ -470,14 +487,14 @@
     perdu: { titre: "Tu as perdu ton animal", items: [
       ["Cherche tout de suite autour de chez toi", "Appelle-le, demande aux voisins, regarde sous les voitures et dans les ravines proches. Un animal qui a peur se cache souvent tout près. Un chat sort plutôt à la tombée de la nuit : cherche-le aussi à ce moment-là."],
       ["Déclare la perte sur I-CAD", "Si ton animal est pucé, déclare-le perdu dans ton espace sur i-cad.fr. Vétérinaires, fourrières et assos sont prévenus quand ils lisent sa puce."],
-      ["Appelle la fourrière de ta commune", "Choisis ta commune à côté pour avoir le numéro. Sans nouvelles, rappelle tous les 2 jours : au bout de 8 jours ouvrés en fourrière, un animal non réclamé est considéré comme abandonné."],
-      ["Publie une annonce", "Prépare-la à côté, puis colle-la dans les groupes Facebook de ta commune avec une photo nette."],
+      ["Appelle la fourrière de ta commune", "Le numéro est en haut de la page, dès que tu as choisi ta commune. Sans nouvelles, rappelle tous les 2 jours : au bout de 8 jours ouvrés en fourrière, un animal non réclamé est considéré comme abandonné."],
+      ["Publie une annonce", "Prépare-la avec « Préparer l'annonce », puis colle-la dans les groupes Facebook de ta commune avec une photo nette."],
       ["Quand il est rentré", "Déclare-le « retrouvé » sur I-CAD, sinon il reste noté comme perdu. Et pense à retirer tes annonces."]
     ], liens: [["Déclarer sur I-CAD", "https://www.i-cad.fr"]] },
     trouve: { titre: "Tu as trouvé un animal", items: [
       ["Approche doucement", "Sans le brusquer. S'il est blessé ou agressif, ne prends pas de risque : appelle la fourrière."],
       ["Fais lire sa puce", "N'importe quel vétérinaire lit la puce gratuitement en quelques secondes. S'il est pucé, le propriétaire est prévenu par I-CAD."],
-      ["Pas de puce ? Préviens la fourrière", "Choisis ta commune à côté pour avoir le numéro. C'est le circuit officiel pour que sa famille le retrouve, même si tu le gardes le temps de chercher."],
+      ["Pas de puce ? Préviens la fourrière", "Le numéro est en haut de la page, dès que tu as choisi ta commune. C'est le circuit officiel pour que sa famille le retrouve, même si tu le gardes le temps de chercher."],
       ["Publie une annonce « trouvé »", "Dans les groupes Facebook de ta commune, avec une photo. Garde un détail pour toi (une tache, une cicatrice) : ça permet de vérifier le vrai propriétaire."],
       ["Un animal errant, pas perdu ?", "Signale-le sur stoperrance.re : ton signalement part vers les services de ta commune."]
     ], liens: [["Signaler sur StopErrance.re", "https://www.stoperrance.re"]] },
@@ -489,7 +506,7 @@
       ["Vérifie l'âge et la puce", "L'animal doit avoir plus de 8 semaines. Il doit déjà avoir une puce : c'est obligatoire avant toute vente ou tout don. Note son numéro."],
       ["Signe le certificat d'engagement, puis attends 7 jours", "La première fois que tu prends un chien ou un chat, tu signes un certificat d'engagement. Tu repars avec l'animal au moins 7 jours plus tard. Ce temps sert à réfléchir : c'est la loi, que tu adoptes ou que tu achètes."],
       ["Repars avec les bons papiers", "On te remet une attestation de cession ou une facture datée, et un certificat vétérinaire de moins de 3 mois. L'ancien propriétaire déclare le changement sur I-CAD, et tu reçois la carte à ton nom."],
-      ["Va chez le vétérinaire dans les premiers jours", "Une visite rapide vérifie que tout va bien. Pour certaines maladies, la garantie ne joue que si elles sont repérées dans les premiers jours. Garde bien ta facture. Pour stériliser, ton intercommunalité peut t'aider : choisis ta commune à côté pour le numéro."]
+      ["Va chez le vétérinaire dans les premiers jours", "Une visite rapide vérifie que tout va bien. Pour certaines maladies, la garantie ne joue que si elles sont repérées dans les premiers jours. Garde bien ta facture. Pour stériliser, ton intercommunalité peut t'aider : choisis ta commune en haut de la page pour le numéro."]
     ], liens: [["Voir les assos de l'île", "#assos"], ["Les règles sur service-public.fr", "https://www.service-public.gouv.fr/particuliers/vosdroits/F34329"], ["Recevoir un animal sur I-CAD", "https://www.i-cad.fr/articles/ceder-un-animal-vente-don"]] }
   };
   var situation = "perdu";
@@ -498,6 +515,8 @@
     $("#steps-card").innerHTML = '<h2>'+esc(e.titre)+'</h2><ol class="steps">'+e.items.map(function(i){ return '<li><div><b>'+esc(i[0])+'</b><span>'+esc(i[1])+'</span></div></li>'; }).join("")+'</ol>'+
       '<div class="actions" style="margin-top:18px">'+e.liens.map(function(l){ var ext = l[1].charAt(0) !== "#"; return '<a class="btn btn-ghost btn-s" href="'+esc(l[1])+'"'+(ext?' target="_blank" rel="noopener"':'')+'>'+esc(l[0])+(ext?' ↗':'')+'</a>'; }).join("")+'</div>';
     $("#annonce-card").hidden = (situation === "adopter");
+    $("#annonce-col").hidden = (situation === "adopter");
+    $("#perdu-panel").classList.toggle("solo", situation === "adopter");
     majAnnonce();
   }
   $$(".seg button").forEach(function(b){
@@ -523,7 +542,7 @@
     if (!c) { box.innerHTML = ""; return; }
     var i = KP.intercos[KP.communes[c]];
     box.innerHTML = '<p class="small muted">'+esc(c)+' dépend <b style="color:var(--ink)">'+esc(i.de)+'</b> ('+esc(i.nom.replace(/^[^(]*\(|\)$/g,""))+'), qui gère la fourrière et l\'errance.</p>'+
-      i.tels.map(function(t, k){ return '<div class="tel"><span>'+esc((i.libs && i.libs[k]) || (t.indexOf("0800")===0?"Numéro gratuit":"Standard"))+'</span><b>'+esc(t)+'</b></div>'; }).join("")+(i.note ? '<p class="small muted">'+esc(i.note)+'</p>' : "")+
+      '<div class="lks">'+i.tels.map(function(t, k){ return lienTel(t, (i.libs && i.libs[k]) || (t.indexOf("0800")===0?"Numéro gratuit":"Standard")); }).join("")+'</div>'+(i.note ? '<p class="small muted">'+esc(i.note)+'</p>' : "")+(i.aConfirmer ? '<p class="small muted">⏳ '+esc(i.aConfirmer)+'</p>' : "")+
       '<p class="mail">✉️ <span style="user-select:all">'+esc(i.mail)+'</span> · <a href="'+esc(i.site)+'" target="_blank" rel="noopener">'+esc(i.site.replace("https://",""))+' ↗</a></p>';
   }
   function majAnnonce(){
@@ -560,7 +579,7 @@
       if (t.dyn === "interco") {
         if (c && KP.communes[c]) { var i = KP.intercos[KP.communes[c]];
           dyn = '<div class="dyn"><b>'+esc(c)+' : '+esc(i.nom)+'</b><div class="lks">'+i.tels.map(function(n, k){ return lienTel(n, (i.libs && i.libs[k]) || (n.indexOf("0800")===0?"Numéro gratuit":"Standard")); }).join("")+'</div>'+
-            (i.note ? '<p class="small muted">'+esc(i.note)+'</p>' : "")+
+            (i.note ? '<p class="small muted">'+esc(i.note)+'</p>' : "")+(i.aConfirmer ? '<p class="small muted">⏳ '+esc(i.aConfirmer)+'</p>' : "")+
             '<p class="mail">✉️ <span style="user-select:all">'+esc(i.mail)+'</span></p><div class="lks">'+lienExt(i.site)+'</div></div>';
         } else dyn = '<div class="dyn"><p class="small muted">Choisis ta commune en haut de la page pour voir le numéro de ta fourrière et de ta stérilisation aidée.</p></div>';
       }
@@ -596,8 +615,23 @@
     return '<div class="rap"><div class="l"><b>'+lib+'</b><span>Prochain : '+fmt(p)+'</span></div><span class="etat '+cls+'">'+txt+'</span></div>';
   }
   var edition = null;
+  function texteCarnet(){
+    var auj = new Date(); auj.setHours(12,0,0,0);
+    var out = ["📒 Mon carnet Kat'Pat' (copie du "+fmt(auj)+")", ""];
+    animaux().forEach(function(a){
+      out.push((a.espece==="Chat"?"🐈 ":"🐕 ")+a.nom+" ("+String(a.espece||"Chien").toLowerCase()+")");
+      if (a.puce) out.push("Puce : "+a.puce);
+      [["Vaccin", a.vaccin, a.vaccinM||DEF.vaccinM], ["Anti-tiques et puces", a.tiques, a.tiquesM||DEF.tiquesM], ["Vermifuge", a.verm, a.vermM||DEF.vermM]].forEach(function(r){
+        out.push(r[1] ? r[0]+" : dernier le "+fmt(new Date(r[1]+"T12:00:00"))+(String(r[2])==="1" ? ", chaque mois" : ", tous les "+r[2]+" mois")+". Prochain (calculé) : "+fmt(ajouterMois(r[1], r[2])) : r[0]+" : pas encore noté");
+      });
+      out.push("");
+    });
+    out.push("Pour le remettre dans Kat'Pat' : ouvre « Mon carnet » et ressaisis les dates.", "https://pixiartpro.github.io/katpat/app.html");
+    return out.join("\n");
+  }
   function rendreCarnet(){
     var l = animaux(), box = $("#animaux");
+    $("#copie-card").hidden = !l.length; $("#copie-txt").hidden = true;
     if (!l.length) { box.innerHTML = '<div class="empty"><p style="font-size:1.6rem">📒</p><p>Ton carnet est vide.</p><p class="small">Ajoute ton animal avec le formulaire : ses rappels s\'afficheront ici.</p></div>'; return; }
     box.innerHTML = l.map(function(a, i){
       return '<article class="animal"><div class="animal-h"><h3>'+(a.espece==="Chat"?"🐈 ":"🐕 ")+esc(a.nom)+'</h3><div class="actions"><button class="btn btn-ghost btn-s" type="button" data-ed="'+i+'">Modifier</button><button class="btn btn-ghost btn-s" type="button" data-del="'+i+'">Retirer</button></div></div>'+
@@ -636,6 +670,14 @@
   }
   $("#partager").addEventListener("click", function(){
     navigator.share({ text: $("#annonce").textContent }).catch(function(){});
+  });
+  if (navigator.share) { $("#copie-env").hidden = false; } else { $("#copie-cop").classList.replace("btn-ghost","btn-amber"); }
+  $("#copie-env").addEventListener("click", function(){
+    navigator.share({ title: "Mon carnet Kat'Pat'", text: texteCarnet() }).then(function(){ toast("Copie partie : vérifie qu'elle est bien arrivée"); }).catch(function(){});
+  });
+  $("#copie-cop").addEventListener("click", function(){
+    $("#copie-txt").textContent = texteCarnet();
+    copier($("#copie-txt").textContent, $("#copie-txt"), "Copié : colle-le dans tes notes ou un message");
   });
   $("#partager-app").addEventListener("click", function(){
     navigator.share({ title: "Kat'Pat'", text: "Le carnet péi du chien et du chat : santé, animal perdu ou trouvé, assos de l'île.", url: "https://pixiartpro.github.io/katpat/app.html" }).catch(function(){});
