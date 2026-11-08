@@ -22,7 +22,7 @@
 <meta name="twitter:card" content="summary_large_image" />
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22%3E%3Ctext y=%22.9em%22 font-size=%2290%22%3E🐾%3C/text%3E%3C/svg%3E" />
 <title>Kat'Pat' — le carnet péi du chien et du chat</title>
-<meta name="description" content="Santé adaptée à La Réunion, perdu, trouvé, à adopter, et les assos de l'île. On t'oriente ; c'est ton vétérinaire qui décide." />
+<meta name="description" content="Santé adaptée à La Réunion, perdu, trouvé, adopter ou acheter, et les assos de l'île. On t'oriente ; c'est ton vétérinaire qui décide." />
 <style>
   /* Polices custom auto-hébergées */
   @font-face{font-family:"Fraunces";src:url("assets/fonts/fraunces-latin.woff2") format("woff2");font-weight:500 700;font-display:swap}
@@ -266,13 +266,13 @@
 
   <!-- PERDU / TROUVÉ / ADOPTER -->
   <section class="view wrap" id="v-perdu" hidden>
-    <div class="kicker">Perdu · Trouvé · À adopter</div>
+    <div class="kicker">Perdu · Trouvé · Accueillir</div>
     <h1>Ramener chaque animal chez lui.</h1>
     <p class="lead">Les bons gestes dans l'ordre, et le bon contact selon ta commune. Pour diffuser une annonce, on passe par les groupes Facebook de ton quartier : on ne les remplace pas.</p>
     <div class="seg" role="tablist" aria-label="Ta situation">
       <button type="button" role="tab" id="t-perdu" aria-selected="true" data-s="perdu">J'ai perdu</button>
       <button type="button" role="tab" id="t-trouve" aria-selected="false" data-s="trouve">J'ai trouvé</button>
-      <button type="button" role="tab" id="t-adopter" aria-selected="false" data-s="adopter">J'adopte</button>
+      <button type="button" role="tab" id="t-adopter" aria-selected="false" data-s="adopter">J'accueille</button>
     </div>
 
     <div class="panel">
@@ -457,13 +457,16 @@
       ["Publie une annonce « trouvé »", "Dans les groupes Facebook de ta commune, avec une photo. Garde un détail pour toi (une tache, une cicatrice) : ça permet de vérifier le vrai propriétaire."],
       ["Un animal errant, pas perdu ?", "Signale-le sur stoperrance.re : ton signalement part vers les services de ta commune."]
     ], liens: [["Signaler sur StopErrance.re", "https://www.stoperrance.re"]] },
-    adopter: { titre: "Tu veux adopter", items: [
-      ["Adopte auprès d'une asso ou d'un refuge", "L'animal est en général vacciné, pucé et souvent stérilisé, et l'asso t'aide à choisir celui qui va avec ta vie."],
-      ["Pense à la chaleur et à ta maison", "Un chien à poil épais ou à nez écrasé souffre plus de notre climat. Un jardin bien fermé évite les fugues."],
-      ["Prévois le budget", "Vétérinaire, anti-tiques toute l'année, nourriture : demande une estimation à ton vétérinaire avant de t'engager."],
-      ["La puce est obligatoire", "Vérifie que l'animal est identifié et que la carte I-CAD passe bien à ton nom."],
-      ["Stérilisation aidée", "Si tu n'es pas imposable, ton intercommunalité peut stériliser ton animal gratuitement. Choisis ta commune à côté pour le numéro."]
-    ], liens: [["Voir les assos de l'île", "#assos"]] }
+    adopter: { titre: "Tu veux adopter ou acheter", items: [
+      ["Prends le temps de décider", "Adopter ou acheter un animal, ça engage. Un chien vit souvent plus de 11 ans, un chat plus de 15 ans. Parles-en avec toute ta famille, et pense aux vacances, au logement et à notre chaleur : un chien à poil épais ou à nez écrasé en souffre plus."],
+      ["Prévois le budget", "Nourriture, vétérinaire chaque année, anti-tiques toute l'année, stérilisation : un animal en bonne santé coûte déjà plusieurs centaines d'euros par an. Garde aussi un peu d'argent pour les imprévus."],
+      ["Choisis quelqu'un de sérieux", "Une asso ou un refuge, un éleveur déclaré : ce sont deux bons choix. Un éleveur déclaré a un numéro SIREN ou un numéro de portée LOF ou LOOF. Bon signe : il te montre la mère, te donne un contrat écrit et reste joignable après."],
+      ["Va voir l'animal en vrai", "Rencontre toujours l'animal avant de payer quoi que ce soit. Ne verse pas d'acompte pour un animal que tu n'as jamais vu. Et ne paie jamais pour un animal annoncé comme donné."],
+      ["Vérifie l'âge et la puce", "L'animal doit avoir plus de 8 semaines. Il doit déjà avoir une puce : c'est obligatoire avant toute vente ou tout don. Note son numéro."],
+      ["Signe le certificat d'engagement, puis attends 7 jours", "La première fois que tu prends un chien ou un chat, tu signes un certificat d'engagement. Tu repars avec l'animal au moins 7 jours plus tard. Ce temps sert à réfléchir : c'est la loi, que tu adoptes ou que tu achètes."],
+      ["Repars avec les bons papiers", "On te remet une attestation de cession ou une facture datée, et un certificat vétérinaire de moins de 3 mois. L'ancien propriétaire déclare le changement sur I-CAD, et tu reçois la carte à ton nom."],
+      ["Va chez le vétérinaire dans les premiers jours", "Une visite rapide vérifie que tout va bien. Pour certaines maladies, la garantie ne joue que si elles sont repérées dans les premiers jours. Garde bien ta facture. Pour stériliser, ton intercommunalité peut t'aider : choisis ta commune à côté pour le numéro."]
+    ], liens: [["Voir les assos de l'île", "#assos"], ["Les règles sur service-public.fr", "https://www.service-public.gouv.fr/particuliers/vosdroits/F34329"], ["Recevoir un animal sur I-CAD", "https://www.i-cad.fr/articles/ceder-un-animal-vente-don"]] }
   };
   var situation = "perdu";
   function rendreEtapes(){
