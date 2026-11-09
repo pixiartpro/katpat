@@ -9,6 +9,10 @@ window.KP = {
   /* Relecture des fiches santé par un vétérinaire. Vide tant qu'elle n'est pas faite : l'appli affiche alors
      « en attente de relecture ». Le jour où c'est fait, écrire par exemple : "le 15/12/2026" (ou, si le vétérinaire l'accepte, "le 15/12/2026 (Dr X, clinique Y)") ; uniquement quand TOUTES les fiches sont relues, et vider le champ si une fiche change ensuite. */
   relectureVeto: "",
+  /* Empreinte des fiches relues (garde-fou ajouté le 09/11/2026). Le jour où on remplit relectureVeto, copier ici
+     l'empreinte que le banc affiche (ligne « santé : empreinte des fiches »). Si une fiche change ensuite, l'empreinte
+     ne correspond plus et le banc échoue : on ne peut pas remettre en ligne une fiche modifiée avec la mention « relue ». */
+  relectureVetoEmpreinte: "",
 
   /* Numéros d'urgence animale (centres antipoison vétérinaires, 7 j/7 de 8 h 30 à minuit heure de métropole ;
      à La Réunion : 11 h 30 - 3 h quand la métropole est à l'heure d'hiver, 10 h 30 - 2 h à l'heure d'été).

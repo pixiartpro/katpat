@@ -6,6 +6,7 @@ import { mkdtempSync, readFileSync } from "node:fs";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
 import vm from "node:vm";
+import { createHash } from "node:crypto";
 
 const BASE = process.argv[2] || "http://127.0.0.1:8791/";
 const ROOT = process.argv[3];
@@ -53,6 +54,12 @@ for (const { url, page, document } of IMPRIMES) {
     ok(`fiche ${f.id} renvoie vers le véto`, f.id==='cyclone' || /v[ée]t[ée]rinaire|v[ée]to/.test(txt), "");
     ok(`fiche ${f.id} a des sources`, (f.sources || []).length > 0, "sources vides");
   }
+  // Garde-fou (09/11/2026) : la mention « relue par un vétérinaire » ne vaut que pour les fiches telles qu'il les a relues.
+  const empreinte = createHash("sha256").update(JSON.stringify(KP.fiches)).digest("hex");
+  ok(`santé : empreinte des fiches = ${empreinte}`, true);
+  ok("santé : mention « relue » seulement si les fiches n'ont pas changé depuis la relecture",
+     !KP.relectureVeto || KP.relectureVetoEmpreinte === empreinte,
+     KP.relectureVeto ? "les fiches ont changé depuis la relecture : vider relectureVeto ou faire relire" : "");
   ok("7 assos (APPAR retirée)", KP.assos.length === 7, KP.assos.length);
   for (const a of KP.assos) ok(`asso ${a.nom} a un lien`, !!a.lien, a.lien || "aucun");
   globalThis.__KP = KP;
