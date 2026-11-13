@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
 <!-- Règle de sécurité (14/11/2026) : la page ne charge que ses propres fichiers. Scripts permis : ceux du site lui-même (data/donnees.js) et LE script écrit en bas de cette page (reconnu à son empreinte sha256) ; aucun autre script écrit ou glissé dans la page.
      Si on modifie le script en bas de page, le banc échoue et affiche la nouvelle empreinte à recopier ici. -->
-<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'sha256-DwHanIU6VnGhHuiRw+/88rjBhFAkyr4sOp++xzB1Zyw='; style-src 'self' 'unsafe-inline'; img-src 'self' data:; font-src 'self'; connect-src 'self'; manifest-src 'self'; worker-src 'self'; object-src 'none'; base-uri 'none'; form-action 'self'" />
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'sha256-MeP3R+jampWeIVpGa8edLlJOje9xi97KGu8LQGWuUVo='; style-src 'self' 'unsafe-inline'; img-src 'self' data:; font-src 'self'; connect-src 'self'; manifest-src 'self'; worker-src 'self'; object-src 'none'; base-uri 'none'; form-action 'self'" />
 <!-- Au chaud : invisible des moteurs de recherche tant qu'on ne lance pas publiquement -->
 <meta name="robots" content="noindex, nofollow" />
 <meta name="theme-color" content="#13110f" />
@@ -335,7 +335,7 @@
     <p class="lead">Les numéros et les sites officiels, rangés par thème. Choisis ta commune pour voir ta fourrière et ta stérilisation aidée.</p>
     <div class="card"><div class="field" style="margin:0"><label for="c-commune">Ta commune</label><select id="c-commune"><option value="">Choisir…</option></select></div></div>
     <div class="themes" id="themes"></div>
-    <p class="muted small" style="margin-top:14px">Contacts relevés entre le vendredi 06/11 et le dimanche 08/11/2026, sur la page officielle de chaque organisme quand elle les donne. Les numéros des centres antipoison et ceux de la CINOR viennent d'autres sources et n'ont pas encore été confirmés par un appel : en cas de doute, vérifie sur le site de l'organisme. Un numéro a changé ? Écris-nous : <b style="user-select:all">contact@pix-i-art.re</b></p>
+    <p class="muted small" style="margin-top:14px">Contacts relevés entre le vendredi 06/11 et le dimanche 08/11/2026, sur la page officielle de chaque organisme quand elle les donne. Un numéro marqué ⏳ n'a pas encore été confirmé par l'organisme lui-même : en cas de doute, vérifie sur son site. Un numéro a changé ? Écris-nous : <b style="user-select:all">contact@pix-i-art.re</b></p>
   </section>
 
   <!-- ASSOS -->
@@ -415,7 +415,7 @@
 </div>
 <div class="toast" id="toast" role="status"></div>
 
-<script src="data/donnees.js?v=20261108c"></script>
+<script src="data/donnees.js?v=20261114"></script>
 <script>
 (function(){
   "use strict";
@@ -453,8 +453,11 @@
     if (!items || !items.length) return "";
     return '<div class="blk '+(cls||"")+'"><h4>'+titre+'</h4><ul>'+items.map(function(i){ return "<li>"+esc(i)+"</li>"; }).join("")+"</ul></div>";
   }
+  function noteAConfirmer(elems, suite){ if (!elems || !elems.length) return ""; var l = elems.length > 1 ? elems.slice(0, -1).join(", ") + " et " + elems[elems.length - 1] : elems[0]; return "Pas encore confirmé par l'organisme : " + l + "." + (suite ? " " + suite : ""); }
+  function noteAntipoison(){ return noteAConfirmer((KP.antipoison||[]).filter(function(a){ return !a.confirme; }).map(function(a){ return a.nom.replace(/ \(.*\)/, ""); }), KP.antipoisonSuite); }
+  function pNote(t){ return t ? '<p class="small muted">⏳ '+esc(t)+'</p>' : ""; }
   function telsAntipoison(){
-    return '<div class="tel-list">'+(KP.antipoison||[]).map(function(a){ return '<div class="tel"><span>'+esc(a.nom)+'</span><b>'+esc(a.tel)+'</b></div>'; }).join("")+"</div>"+(KP.antipoisonNote ? '<p class="small muted">⏳ '+esc(KP.antipoisonNote)+'</p>' : "");
+    return '<div class="tel-list">'+(KP.antipoison||[]).map(function(a){ return '<div class="tel"><span>'+esc(a.nom)+'</span><b>'+esc(a.tel)+'</b></div>'; }).join("")+"</div>"+pNote(noteAntipoison());
   }
   function rendreFiches(filtre){
     var html = (KP.fiches||[]).filter(function(f){
@@ -546,7 +549,7 @@
     if (!c) { box.innerHTML = ""; return; }
     var i = KP.intercos[KP.communes[c]];
     box.innerHTML = '<p class="small muted">'+esc(c)+' dépend <b style="color:var(--ink)">'+esc(i.de)+'</b> ('+esc(i.nom.replace(/^[^(]*\(|\)$/g,""))+'), qui gère la fourrière et l\'errance.</p>'+
-      '<div class="lks">'+i.tels.map(function(t, k){ return lienTel(t, (i.libs && i.libs[k]) || (t.indexOf("0800")===0?"Numéro gratuit":"Standard")); }).join("")+'</div>'+(i.note ? '<p class="small muted">'+esc(i.note)+'</p>' : "")+(i.aConfirmer ? '<p class="small muted">⏳ '+esc(i.aConfirmer)+'</p>' : "")+
+      '<div class="lks">'+i.tels.map(function(t, k){ return lienTel(t, (i.libs && i.libs[k]) || (t.indexOf("0800")===0?"Numéro gratuit":"Standard")); }).join("")+'</div>'+(i.note ? '<p class="small muted">'+esc(i.note)+'</p>' : "")+pNote(noteAConfirmer(i.aConfirmer, i.aConfirmerSuite))+
       '<p class="mail">✉️ <span style="user-select:all">'+esc(i.mail)+'</span> · <a href="'+esc(i.site)+'" target="_blank" rel="noopener">'+esc(i.site.replace("https://",""))+' ↗</a></p>';
   }
   function majAnnonce(){
@@ -579,11 +582,11 @@
     $("#themes").innerHTML = (KP.contacts||[]).map(function(t){
       var dyn = "";
       var apres = "";
-      if (t.dyn === "antipoison") apres = '<div class="ct"><b>Il a avalé un produit ou une plante ?</b><p>Appelle ton vétérinaire, ou un centre antipoison vétérinaire. Ils répondent environ de 11 h 30 à 3 h du matin chez nous (de 10 h 30 à 2 h d\'avril à octobre).</p><div class="lks">'+(KP.antipoison||[]).map(function(a){ return lienTel(a.tel, a.nom.replace(/ \(.*\)/,"")); }).join("")+'</div>'+(KP.antipoisonNote ? '<p class="small muted">⏳ '+esc(KP.antipoisonNote)+'</p>' : "")+'</div>';
+      if (t.dyn === "antipoison") apres = '<div class="ct"><b>Il a avalé un produit ou une plante ?</b><p>Appelle ton vétérinaire, ou un centre antipoison vétérinaire. Ils répondent environ de 11 h 30 à 3 h du matin chez nous (de 10 h 30 à 2 h d\'avril à octobre).</p><div class="lks">'+(KP.antipoison||[]).map(function(a){ return lienTel(a.tel, a.nom.replace(/ \(.*\)/,"")); }).join("")+'</div>'+pNote(noteAntipoison())+'</div>';
       if (t.dyn === "interco") {
         if (c && KP.communes[c]) { var i = KP.intercos[KP.communes[c]];
           dyn = '<div class="dyn"><b>'+esc(c)+' : '+esc(i.nom)+'</b><div class="lks">'+i.tels.map(function(n, k){ return lienTel(n, (i.libs && i.libs[k]) || (n.indexOf("0800")===0?"Numéro gratuit":"Standard")); }).join("")+'</div>'+
-            (i.note ? '<p class="small muted">'+esc(i.note)+'</p>' : "")+(i.aConfirmer ? '<p class="small muted">⏳ '+esc(i.aConfirmer)+'</p>' : "")+
+            (i.note ? '<p class="small muted">'+esc(i.note)+'</p>' : "")+pNote(noteAConfirmer(i.aConfirmer, i.aConfirmerSuite))+
             '<p class="mail">✉️ <span style="user-select:all">'+esc(i.mail)+'</span></p><div class="lks">'+lienExt(i.site)+'</div></div>';
         } else dyn = '<div class="dyn"><p class="small muted">Choisis ta commune en haut de la page pour voir le numéro de ta fourrière et de ta stérilisation aidée.</p></div>';
       }
@@ -695,7 +698,7 @@
 
   /* ---------- Démarrage ---------- */
   $("#maj").textContent = KP.maj || "";
-  $("#antipoison").innerHTML = (KP.antipoison||[]).map(function(a){ return '<div class="tel"><span>'+esc(a.nom)+'</span><b>'+esc(a.tel)+'</b></div>'; }).join("")+(KP.antipoisonNote ? '<p class="small muted">⏳ '+esc(KP.antipoisonNote)+'</p>' : "");
+  $("#antipoison").innerHTML = (KP.antipoison||[]).map(function(a){ return '<div class="tel"><span>'+esc(a.nom)+'</span><b>'+esc(a.tel)+'</b></div>'; }).join("")+pNote(noteAntipoison());
   rendreFiches("tout"); rendreCommunes(); rendreThemes(); rendreEtapes(); rendreAssos(); rendreCarnet(); montrer();
 })();
 </script>

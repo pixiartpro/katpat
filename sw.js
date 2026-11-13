@@ -1,8 +1,8 @@
 /* Kat'Pat' — garde une copie de l'appli pour qu'elle s'ouvre sans réseau.
    Toujours le réseau d'abord (pour avoir la dernière version), la copie seulement si le réseau manque.
    Pour forcer un nettoyage complet : changer le numéro de VERSION. */
-var VERSION = "katpat-v9";
-var BASE = ["./app.html", "./index.html", "./data/donnees.js?v=20261108c", "./manifest.webmanifest", "./mentions.html",
+var VERSION = "katpat-v10";
+var BASE = ["./app.html", "./index.html", "./data/donnees.js?v=20261114", "./manifest.webmanifest", "./mentions.html",
   "./assets/fonts/fraunces-latin.woff2", "./assets/fonts/inter-latin.woff2",
   "./assets/concours-app.jpg", "./assets/icon-192.png", "./assets/logo-katpat.svg", "./assets/favicon.svg"];
 

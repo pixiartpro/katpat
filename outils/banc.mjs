@@ -77,6 +77,25 @@ for (const { url, page, document } of IMPRIMES) {
   for (const [d, n, att] of cas) { const r = iso(ajouterMois(d, n)); ok(`rappel ${d} + ${n} mois = ${att}`, r === att, r); }
 }
 
+// ---------- 2 ter. Mention « pas encore confirmé », numéro par numéro (14/11/2026) ----------
+{
+  const app = readFileSync(join(ROOT, "app.html"), "utf8");
+  const m = app.match(/function noteAConfirmer\(elems, suite\)\{[^\n]*\}/);
+  ok("fonction noteAConfirmer trouvée", !!m);
+  if (m) {
+    const f = new Function("return " + m[0])();
+    ok("mention : rien à confirmer ⇒ aucune mention", f([], "x") === "" && f(undefined) === "");
+    ok("mention : un seul élément", f(["CNITV"], "Suite.") === "Pas encore confirmé par l'organisme : CNITV. Suite.", f(["CNITV"], "Suite."));
+    ok("mention : trois éléments, « et » avant le dernier", f(["0800 315 316", "0262 28 98 84", "l'adresse mail"]) === "Pas encore confirmé par l'organisme : 0800 315 316, 0262 28 98 84 et l'adresse mail.", f(["0800 315 316", "0262 28 98 84", "l'adresse mail"]));
+  }
+  const src = readFileSync(join(ROOT, "data/donnees.js"), "utf8");
+  const ctx = { window: {} }; vm.createContext(ctx); vm.runInContext(src, ctx); const K = ctx.window.KP;
+  ok("antipoison : chaque centre a son champ « confirme » (vide = pas encore confirmé)", K.antipoison.every(a => typeof a.confirme === "string"), JSON.stringify(K.antipoison));
+  for (const [k, i] of Object.entries(K.intercos)) if (i.aConfirmer) {
+    ok(`interco ${k} : « aConfirmer » ne cite que ses propres numéros ou « l'adresse mail »`, Array.isArray(i.aConfirmer) && i.aConfirmer.every(e => i.tels.includes(e) || e === "l'adresse mail"), JSON.stringify(i.aConfirmer));
+  }
+}
+
 // ---------- 2 bis. Règle de sécurité de l'appli (14/11/2026) ----------
 {
   const app = readFileSync(join(ROOT, "app.html"), "utf8");
@@ -188,7 +207,7 @@ const ordre = await ev(`(()=>{const a=document.querySelector('.commune-card'),b=
 ok("Perdu : la commune passe avant les étapes", ordre);
 ok("Perdu : plus de « à côté » dans les étapes", !(await ev(`document.querySelector('#steps-card').textContent.includes('à côté')`)));
 const stDenis = await ev(`(()=>{const s=document.querySelector('#commune');s.value='Saint-Denis';s.dispatchEvent(new Event('change'));return document.querySelector('#contact').textContent})()`);
-ok("Perdu : CINOR signalée « pas encore confirmée »", stDenis.includes("pas encore confirmés"), stDenis.slice(0, 120));
+ok("Perdu : CINOR — ce qui n'est pas confirmé est nommé un par un", stDenis.includes("Pas encore confirmé par l'organisme : " + (KP.intercos.CINOR.aConfirmer || []).join(", ").replace(/, ([^,]*)$/, " et $1") + "."), stDenis.slice(0, 220));
 ok("« dépend du TCO » au masculin", coms.find(c => c.c === "Saint-Paul")?.txt.includes("dépend du TCO"), coms.find(c => c.c === "Saint-Paul")?.txt);
 // mémoire de la commune
 await ev(`(()=>{const s=document.querySelector('#commune');s.value='Cilaos';s.dispatchEvent(new Event('change'))})()`);
@@ -223,12 +242,16 @@ ok("annonce : pas d'injection HTML", !inj.html && !(await ev(`!!window.__pwn`)),
 // Promesses tenues et statuts honnêtes
 ok("accueil appli : plus de « 3 gestes »", !(await ev(`document.body.textContent.includes('3 gestes')`)));
 ok("contacts : plus de « Contacts vérifiés »", !(await ev(`document.querySelector('#v-contacts').textContent.includes('Contacts vérifiés')`)));
-ok("contacts : antipoison et CINOR à confirmer, dit en clair", await ev(`document.querySelector('#v-contacts').textContent.includes("n'ont pas encore été confirmés par un appel")`));
+ok("contacts : le pied explique la mention ⏳ (pas encore confirmé par l'organisme)", await ev(`document.querySelector('#v-contacts').textContent.includes("n'a pas encore été confirmé par l'organisme")`));
 await ev(`location.hash='#sante'`); await sleep(200);
 const stat = await ev(`({b:document.querySelector('#statut-fiches').textContent, t:document.querySelectorAll('#fiches details').length, n:[...document.querySelectorAll('#fiches details')].filter(d=>d.textContent.includes('pas encore relue par un vétérinaire')).length})`);
 ok("santé : bandeau « en attente de relecture » tant que relectureVeto est vide", KP.relectureVeto ? stat.b.includes("relues par un vétérinaire") : stat.b.includes("en attente de relecture"), stat.b.slice(0, 80));
 ok("santé : chaque fiche dit qu'elle n'est pas encore relue", KP.relectureVeto ? true : (stat.t > 0 && stat.n === stat.t), stat.n + '/' + stat.t);
-ok("santé : réserve « pas encore confirmés » près des numéros antipoison", !KP.antipoisonNote || (await ev(`document.querySelector('#antipoison').textContent.includes('pas encore confirmés')`)));
+{
+  const nc = KP.antipoison.filter(a => !a.confirme).map(a => a.nom.replace(/ \(.*\)/, "")), oui = KP.antipoison.filter(a => a.confirme).map(a => a.nom.replace(/ \(.*\)/, ""));
+  const tx = await ev(`document.querySelector('#antipoison').textContent`);
+  ok("santé : la mention ⏳ nomme chaque centre antipoison pas encore confirmé, et seulement eux", nc.length ? nc.every(n => tx.includes(n)) && tx.includes("Pas encore confirmé par l'organisme") && oui.every(n => !tx.slice(tx.indexOf("Pas encore")).includes(n)) : !tx.includes("Pas encore confirmé"), tx.slice(-200));
+}
 // Carnet
 await ev(`location.hash='#carnet'`); await sleep(200);
 ok("carnet vide : pas de carte « Garder une copie »", await ev(`document.querySelector('#copie-card').hidden`));
