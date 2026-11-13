@@ -133,6 +133,11 @@ for (const page of ["index.html", "app.html", "mentions.html"]) {
   const bloque = await ev(`new Promise(r=>{let v=false;document.addEventListener('securitypolicyviolation',e=>{if(/exemple\.invalid/.test(e.blockedURI))v=true},{once:false});const s=document.createElement('script');s.src='https://exemple.invalid/x.js';document.head.appendChild(s);setTimeout(()=>{s.remove();r(v)},400)})`);
   ok(`${page} : un script venu d'un autre site est bloqué`, bloque === true, String(bloque));
   erreurs.splice(0, erreurs.length, ...erreurs.filter(e => !/exemple\.invalid/.test(e)));
+  if (page === "app.html") {
+    const glisse = await ev(`new Promise(r=>{window.__kpGlisse=0;const s=document.createElement('script');s.textContent='window.__kpGlisse=1';document.body.appendChild(s);setTimeout(()=>{s.remove();r(window.__kpGlisse)},300)})`);
+    ok("app.html : un script glissé dans la page ne s'exécute pas", glisse === 0, String(glisse));
+    erreurs.length = 0;
+  }
   const imgs = await ev(`[...document.images].filter(i=>i.complete && i.naturalWidth===0 && i.loading!=='lazy').map(i=>i.src)`);
   ok(`${page} : images non cassées`, imgs.length === 0, imgs.join(","));
   if (page === "index.html") {
