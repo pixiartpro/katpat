@@ -3,6 +3,8 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+<!-- Règle de sécurité (14/11/2026) : la page ne charge que ses propres fichiers. Une ressource venue d'ailleurs = l'ajouter ici, sinon le banc échoue. -->
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; img-src 'self' data:; font-src 'self'; connect-src 'self'; manifest-src 'self'; worker-src 'self'; object-src 'none'; base-uri 'none'; form-action 'self'" />
 <!-- Au chaud : invisible des moteurs de recherche tant qu'on ne lance pas publiquement -->
 <meta name="robots" content="noindex, nofollow" />
 <meta name="theme-color" content="#13110f" />

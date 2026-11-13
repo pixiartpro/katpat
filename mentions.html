@@ -3,6 +3,8 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+<!-- Règle de sécurité (14/11/2026) : la page ne charge que ses propres fichiers. Une ressource venue d'ailleurs = l'ajouter ici, sinon le banc échoue. -->
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'none'; style-src 'self' 'unsafe-inline'; img-src 'self' data:; media-src 'self'; font-src 'self'; object-src 'none'; base-uri 'none'; form-action 'none'" />
 <meta name="robots" content="noindex, nofollow" />
 <meta name="theme-color" content="#13110f" />
 <title>Kat'Pat' — mentions légales et confidentialité</title>

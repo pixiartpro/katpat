@@ -94,6 +94,7 @@ ws.addEventListener("message", e => {
   if (m.id && wait.has(m.id)) { wait.get(m.id)(m); wait.delete(m.id); }
   if (m.method === "Runtime.exceptionThrown") erreurs.push(m.params.exceptionDetails.exception?.description || m.params.exceptionDetails.text);
   if (m.method === "Runtime.consoleAPICalled" && m.params.type === "error") erreurs.push(m.params.args.map(a => a.value || a.description).join(" "));
+  if (m.method === "Log.entryAdded" && (m.params.entry.source === "security" || /Content Security Policy/i.test(m.params.entry.text))) erreurs.push("CSP : " + m.params.entry.text);
   if (m.method === "Network.responseReceived") reseau.push({ url: m.params.response.url, status: m.params.response.status });
   if (m.method === "Network.requestWillBeSent") urlsDemandees.set(m.params.requestId, m.params.request.url);
   if (m.method === "Network.loadingFailed" && !m.params.canceled) reseau.push({ url: urlsDemandees.get(m.params.requestId) || m.params.requestId, status: "ÉCHEC " + m.params.errorText });
@@ -101,7 +102,7 @@ ws.addEventListener("message", e => {
 const cdp = (method, params = {}) => new Promise(r => { const id = ++nid; wait.set(id, r); ws.send(JSON.stringify({ id, method, params })); });
 const ev = async (expr) => { const r = await cdp("Runtime.evaluate", { expression: expr, awaitPromise: true, returnByValue: true }); if (r.result?.exceptionDetails) throw new Error(r.result.exceptionDetails.exception?.description || "eval"); return r.result?.result?.value; };
 const aller = async (url) => { await cdp("Page.navigate", { url }); await sleep(1200); };
-await cdp("Runtime.enable"); await cdp("Page.enable"); await cdp("Network.enable");
+await cdp("Runtime.enable"); await cdp("Page.enable"); await cdp("Network.enable"); await cdp("Log.enable");
 
 for (const page of ["index.html", "app.html", "mentions.html"]) {
   erreurs.length = 0; reseau.length = 0;
@@ -109,6 +110,12 @@ for (const page of ["index.html", "app.html", "mentions.html"]) {
   ok(`${page} : aucune erreur JS`, erreurs.length === 0, erreurs.join(" | "));
   const ko = reseau.filter(r => typeof r.status !== "number" || r.status >= 400);
   ok(`${page} : toutes les ressources chargées`, ko.length === 0, JSON.stringify(ko));
+  // Règle de sécurité (14/11/2026) : présente, et elle bloque bien un script venu d'ailleurs.
+  const csp = await ev(`(document.querySelector('meta[http-equiv="Content-Security-Policy"]')||{}).content||""`);
+  ok(`${page} : règle de sécurité présente (default-src 'self', object-src 'none', base-uri 'none')`, /default-src 'self'/.test(csp) && /object-src 'none'/.test(csp) && /base-uri 'none'/.test(csp), csp);
+  const bloque = await ev(`new Promise(r=>{let v=false;document.addEventListener('securitypolicyviolation',e=>{if(/exemple\.invalid/.test(e.blockedURI))v=true},{once:false});const s=document.createElement('script');s.src='https://exemple.invalid/x.js';document.head.appendChild(s);setTimeout(()=>{s.remove();r(v)},400)})`);
+  ok(`${page} : un script venu d'un autre site est bloqué`, bloque === true, String(bloque));
+  erreurs.splice(0, erreurs.length, ...erreurs.filter(e => !/exemple\.invalid/.test(e)));
   const imgs = await ev(`[...document.images].filter(i=>i.complete && i.naturalWidth===0 && i.loading!=='lazy').map(i=>i.src)`);
   ok(`${page} : images non cassées`, imgs.length === 0, imgs.join(","));
   if (page === "index.html") {
