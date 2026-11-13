@@ -77,6 +77,23 @@ for (const { url, page, document } of IMPRIMES) {
   for (const [d, n, att] of cas) { const r = iso(ajouterMois(d, n)); ok(`rappel ${d} + ${n} mois = ${att}`, r === att, r); }
 }
 
+// ---------- 2 bis. Règle de sécurité de l'appli (14/11/2026) ----------
+{
+  const app = readFileSync(join(ROOT, "app.html"), "utf8");
+  const scripts = [...app.matchAll(/<script>([\s\S]*?)<\/script>/g)].map(m => "'sha256-" + createHash("sha256").update(m[1], "utf8").digest("base64") + "'");
+  const csp = (app.match(/http-equiv="Content-Security-Policy" content="([^"]+)"/) || [])[1] || "";
+  ok("appli : le script de la page est autorisé par son empreinte (sinon recopier celle-ci dans la règle de sécurité)", scripts.length === 1 && csp.includes(scripts[0]), scripts.join(" "));
+  ok("appli : aucun « unsafe-inline » pour les scripts", !/script-src[^;]*unsafe-inline/.test(csp), csp);
+  ok("appli : aucun gestionnaire d'événement écrit dans le HTML (onclick=…)", !/<[^>]+\son[a-z]+\s*=/i.test(app.replace(/<script>[\s\S]*?<\/script>/g, "")));
+
+  // Sans la bonne empreinte, l'appli ne démarre pas du tout dans le navigateur : on s'arrête ici avec une explication claire.
+  if (!(scripts.length === 1 && csp.includes(scripts[0]))) {
+    for (const r of res.filter(r => !r.ok)) console.log("❌ " + r.nom + "  → " + r.detail);
+    console.log("\nArrêt : le script de app.html a changé. Remplacer l'ancienne empreinte 'sha256-…' de la règle de sécurité (en haut de app.html) par : " + scripts[0]);
+    process.exit(1);
+  }
+}
+
 // ---------- 3. Navigateur ----------
 const CHROME = "/Applications/Google Chrome.app/Contents/MacOS/Google Chrome";
 const prof = mkdtempSync(join(tmpdir(), "kp-chrome-"));
